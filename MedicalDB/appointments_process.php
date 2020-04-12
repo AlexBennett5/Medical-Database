@@ -1,6 +1,7 @@
 <?php
     include_once 'includes/dbh.php';
     include_once 'includes/session_check.php';
+    include_once 'includes/query_func.php';
 ?>
 <html>
 <head>
@@ -38,7 +39,11 @@
 			echo "<form action='patient_portal.php'><button type='submit'>Return to patient portal</button></form>";
 
 		} else {
-			mysqli_query($conn, "INSERT INTO Appointments VALUES (NULL, 'Yes','".$datetime."', ".$_POST['Doctor'].", ".$_SESSION['PID'].", ".$_POST['Clinic'].");") or die(mysqli_error($conn));	
+			mysqli_query($conn, "INSERT INTO Appointments VALUES (NULL, 'Yes','".$datetime."', ".$_POST['Doctor'].", ".$_SESSION['PID'].", ".$_POST['Clinic'].");") or die(mysqli_error($conn));
+			$appt_id = mysqli_insert_id($conn);
+
+			record_action("Patient", $_SESSION['PID'], "Scheduled Appointment", $appt_id);
+
 			echo "The appointment with Dr. ".$doc['Name']." at ".$clinic['Clinic_name']." on ".$datetime." was successfully added! <br>";
 			echo "<form action='patient_portal.php'><button type='submit'>Return to patient portal</button></form>";
 		}		

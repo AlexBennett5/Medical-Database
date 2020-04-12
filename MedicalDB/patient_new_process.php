@@ -1,5 +1,6 @@
 <?php
 	include_once "includes/dbh.php";
+	include_once "includes/query_func.php";
 	session_start();
 ?>
 
@@ -43,6 +44,9 @@
 		    $_SESSION['Name'] = $_POST["First_name"];
 		    $_SESSION['User_Type'] = "Patient";
 		    $_SESSION['Has_GP'] = FALSE;
+
+		    record_action("Patient", $_SESSION['PID'], "Created New Patient", $_SESSION['PID']);
+		    record_action("Patient", $_SESSION['PID'], "Logged In", $_SESSION['PID']);
 
 			echo "<h2>Thank for joing UH Medical Clinic</h2>";
 			echo "Your PID is ".$PID."<br>";

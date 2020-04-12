@@ -1,5 +1,6 @@
 <?php
     include_once "includes/dbh.php";
+    include_once "includes/query_func.php";
     session_start();
 
     if(isset($_POST['PID'])) {
@@ -14,7 +15,7 @@
 			echo "This password doesn't match this PID";
 		} else {
 		    $_SESSION['loggedin'] = TRUE;
-		    $_SESSION['PID'] = $_POST['PID'];
+		    $_SESSION['User_ID'] = $_POST['PID'];
 	
 		    $_SESSION['Name'] = $row['First_Name'];
 		    $_SESSION['User_Type'] = "Patient";
@@ -30,6 +31,7 @@
 		    	$_SESSION['GP_ID'] = $doc['NPI'];
 		    }
 
+		    record_action("Patient", $_SESSION['PID'], "Logged In", $_SESSION['PID']);
 
 		    header("location:patient_portal.php");
 

@@ -1,7 +1,7 @@
 <?php
 	include_once 'includes/dbh.php';
     include_once 'includes/session_check.php';
-    include_once 'includes/gen_appoint.php';
+    include_once 'includes/query_func.php';
 
 
     if(isset($_POST['submit'])) {

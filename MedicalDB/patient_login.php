@@ -19,5 +19,4 @@
 	<a href="patient_new.php">New patient? Click here to create account</a>
 </center><br>
 
-
 </html>
