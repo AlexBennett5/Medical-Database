@@ -129,6 +129,7 @@ CREATE TABLE Prescriptions (
     Refill ENUM('Y', 'N') NOT NULL,
     Prescribing_doc BIGINT NOT NULL,
     Patient INT NOT NULL,
+    Expiration_date DATETIME NOT NULL,
     PRIMARY KEY (Prescript_ID),
     FOREIGN KEY (Prescribing_doc) REFERENCES Doctors(NPI) ON DELETE CASCADE,
     FOREIGN KEY (Patient) REFERENCES Patients(PID) ON DELETE CASCADE
@@ -148,9 +149,9 @@ CREATE TRIGGER `duplicate_Script` BEFORE INSERT ON `prescriptions` FOR EACH ROW 
 END $$
 DELIMITER ;
 
-INSERT INTO Prescriptions VALUES (NULL, 'Novalog', '20 ml per every other day', 'Y', 3251567654, 123124);
-INSERT INTO Prescriptions VALUES (NULL, 'Amoxicillin', '2 pills every day', 'N', 3251567654, 234622);
-INSERT INTO Prescriptions VALUES (NULL, 'Lung Steroid', '1 pill every day', 'N', 1342523141, 325543);
+INSERT INTO Prescriptions VALUES (NULL, 'Novalog', '20 ml per every other day', 'Y', 3251567654, 123124, '2020-12-12 10:00:00');
+INSERT INTO Prescriptions VALUES (NULL, 'Amoxicillin', '2 pills every day', 'N', 3251567654, 234622, '2020-12-12 10:00:00');
+INSERT INTO Prescriptions VALUES (NULL, 'Lung Steroid', '1 pill every day', 'N', 1342523141, 325543, '2020-12-12 10:00:00');
 
 CREATE TABLE Clinics (
 	Clinic_ID INT NOT NULL AUTO_INCREMENT,

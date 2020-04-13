@@ -11,7 +11,11 @@
 
 <body>
 
-<a href="patient_login.php">Login</a>
+<?php
+
+header("Location: homepage.php");
+
+?>
 
 </body>
 </html>

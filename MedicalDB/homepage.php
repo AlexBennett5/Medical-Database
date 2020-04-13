@@ -5,7 +5,7 @@
     <title> UH Medical Clinic Homepage </title>
 </head>
     
-    <link rel="stylesheet" type="text/css" href="homepage_styling.css" />
+    <link rel="stylesheet" type="text/css" href="css/homepage_styling.css" />
 
 <body>
     

@@ -1,10 +1,23 @@
 <!DOCTYPE html>
 <html>
 
-<!-- <link rel="stylesheet" type="text/css" href="style.css" /> -->
+<link rel="stylesheet" type="text/css" href="css/default.css"/>
 
 
-<h1> <center> UH Medical Clinic </center> </h1>
+<nav> 
+        <p>UH Medical Clinic</p>
+        <ul>
+            <li><a href="#">≡</a>
+                <ul>
+                    <li><a href="homepage.php">Home</a></li>
+                    <li><a href="login_options.php">Login</a></li>
+                    <li><a href="about_us.php">About Us</a></li>
+                    <li><a href="contact_form_index.php">Contact Us</a></li>
+                </ul>
+            </li>
+        </ul>
+</nav>
+
 <h2> <center> THANK YOU FOR CHOOSING U of H MEDICAL CENTER </center> </h2>
 
 <body>

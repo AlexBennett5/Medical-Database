@@ -2,7 +2,31 @@
 	include_once 'includes/dbh.php';
     include_once 'includes/session_check.php';
     include_once 'includes/query_func.php';
+?>
 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Appointment Scheduler</title>
+<link rel="stylesheet" type = "text/css" href="css/default.css" />
+</head>
+<body>
+<nav> 
+        <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
+        <ul>
+            <li><a href="#">≡</a>
+                <ul>
+                    <li><a href="patient_portal.php">Home</a></li>
+                    <li><a href="patient_info.php">Check your Medical Information</a></li>
+                    <li><a href="patient_prescript.php">Check your Prescriptions</a></li>
+                    <li><a href="patient_appointments_portal.php">Schedule an appointment</a></li>
+                    <li><a href="logout.php">Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+</nav>
+
+<?php
 
     if(isset($_POST['submit'])) {
 
@@ -13,7 +37,7 @@
 
     		echo "Welcome to UH Medical Clinic!"."<br><br>";
 
-    		echo "<form action='appointments_process.php' method='POST'>";
+    		echo "<form action='patient_appointments_process.php' method='POST'>";
 
     		select_GP();
     		select_datetime();
@@ -26,16 +50,16 @@
 
     		echo "We don't have record of a GP on file for you. Appointments with a specialist require a GP's approval"."<br>";
     		echo "Please schedule with a GP before choosing 'Specialist' on the appointment scheduler"."<br>";
-    		echo "<a href='appointments_portal.php'>Return to appointments portal</a>";
+    		echo "<a href='patient_appointments_portal.php'>Return to appointments portal</a>";
 
 
     	//Has GP, scheduling for GP
     	} elseif ($_SESSION['Has_GP']==TRUE && $_POST['app_choice']==0) {
 
     		echo "Welcome back, ".$_SESSION['Name']."!"."<br><br>";
-    		echo "Your current GP is ".$_SESSION['GP_name']."<br>";
+    		echo "Your current GP is ".$_SESSION['GP_name']."<br><br>";
 
-    		echo "<form action='appointments_process.php' method='POST'>";
+    		echo "<form action='patient_appointments_process.php' method='POST'>";
 
             echo "<input type='hidden' name='Doctor' value=".$_SESSION['GP_ID'].">";
 
@@ -49,7 +73,7 @@
 
     		echo "Welcome back, ".$_SESSION['Name']."!";
 
-    		echo "<form action='appointments_process.php' method='POST'>";
+    		echo "<form action='patient_appointments_process.php' method='POST'>";
 
     		select_specialist();
     		select_datetime();
@@ -63,3 +87,6 @@
 ?>
 
 <br><br> <a href='patient_portal.php'>Return to patient portal</a>
+
+</body>
+</html>

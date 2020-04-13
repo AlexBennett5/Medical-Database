@@ -4,10 +4,26 @@
 	session_start();
 ?>
 
-<!-- <link rel="stylesheet" type="text/css" href="style.css" /> -->
+<link rel="stylesheet" type="text/css" href="css/default.css" />
 
 <html>
 <body>
+
+<nav> 
+        <p>Welcome to UH Medical Clinic <?php echo $_SESSION['Name'] ?>!</p>
+        <ul>
+            <li><a href="#">≡</a>
+                <ul>
+                    <li><a href="patient_portal.php">Home</a></li>
+                    <li><a href="patient_info.php">Check your Medical Information</a></li>
+                    <li><a href="patient_prescript.php">Check your Prescriptions</a></li>
+                    <li><a href="patient_appointments_portal.php">Schedule an appointment</a></li>
+                    <li><a href="logout.php">Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+</nav>
+
 <?php
 
 	if(isset($_POST['pwd'])) {
@@ -40,15 +56,15 @@
 
 
 			$_SESSION['loggedin'] = TRUE;
-		    $_SESSION['PID'] = $PID;
+		    $_SESSION['User_ID'] = $PID;
 		    $_SESSION['Name'] = $_POST["First_name"];
 		    $_SESSION['User_Type'] = "Patient";
 		    $_SESSION['Has_GP'] = FALSE;
 
-		    record_action("Patient", $_SESSION['PID'], "Created New Patient", $_SESSION['PID']);
-		    record_action("Patient", $_SESSION['PID'], "Logged In", $_SESSION['PID']);
+		    record_action("Patient", $_SESSION['User_ID'], "Created New Patient", $_SESSION['User_ID']);
+		    record_action("Patient", $_SESSION['User_ID'], "Logged In", $_SESSION['User_ID']);
 
-			echo "<h2>Thank for joing UH Medical Clinic</h2>";
+			echo "<h2>Thank for joining UH Medical Clinic</h2>";
 			echo "Your PID is ".$PID."<br>";
 			echo "<a href='patient_portal.php'> Continue to your patient portal </a>";
 			

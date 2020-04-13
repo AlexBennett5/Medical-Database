@@ -21,7 +21,7 @@
 
         $gp_result = mysqli_query($conn, "SELECT * FROM Doctors WHERE Specialist='No';") or die(mysqli_error($conn));
 
-        echo "Choose a general practitioner:";
+        echo "Choose a general practitioner:<br>";
         echo "<p><select name='Doctor' required>";
         echo "<option value='' selected disabled></option>";
             
@@ -29,7 +29,7 @@
             echo "<option value='".$gp_rows["NPI"]."'>".$gp_rows["Name"]."</option>";
         }
 
-        echo "</select></p>";
+        echo "</select></p><br>";
     }
 
     function select_specialist() {
@@ -38,7 +38,7 @@
 
         $doc_result = mysqli_query($conn, "SELECT * FROM Doctors WHERE Specialist='Yes';") or die(mysqli_error($conn));
 
-        echo "Choose a specialist:";
+        echo "Choose a specialist:<br>";
         echo "<p><select name='Doctor' required>";
         echo "<option value='' selected disabled></option>";
             
@@ -46,7 +46,7 @@
             echo "<option value='".$doc_rows["NPI"]."'>".$doc_rows["Name"]." (".$doc_rows["Specialization"].") </option>";
         }
 
-        echo "</select></p>";
+        echo "</select></p><br>";
     }
 
     function select_clinic() {
@@ -54,7 +54,7 @@
         $conn = sql_connect();
 
         $loc_result = mysqli_query($conn, "SELECT * FROM Clinics;") or die(mysqli_error($conn));
-        echo "Which clinic would you like to have your appointment at?";
+        echo "Which clinic would you like to have your appointment at?<br>";
 
         echo "<p><select name='Clinic' required>";
         echo "<option value='' selected disabled></option>";
@@ -63,12 +63,12 @@
             echo "<option value='".$loc_rows["Clinic_ID"]."'>".$loc_rows["Clinic_name"]."</option>";
         }
         
-        echo "</select></p>";
+        echo "</select></p><br>";
     }
 
     function select_datetime() {
-        echo "Choose the desired appointment date and time:";
-        echo "<p><input type='datetime-local' step=1800 value='2020-01-01T08:00' name='Time' required></p>";
+        echo "Choose the desired appointment date and time:<br>";
+        echo "<p><input type='datetime-local' step=1800 value='2020-01-01T08:00' name='Time' required></p><br>";
     }
 
     // ~~~PATIENT INFO LOGIC~~~ //
@@ -167,6 +167,8 @@
         echo "<table><tr><th> Drug </th>";
         echo "<th> Dosage </th>";
         echo "<th> Refill </th>";
+        echo "<th> Expiration Date </th>";
+        echo "<th> Expired? </th>";
         echo "<th> Prescribing Doctor </th></tr>";
 
         while($pres = mysqli_fetch_assoc($sql_pres)) {
@@ -174,6 +176,15 @@
             echo "<tr><td align='center'>".$pres['Prescript_Name']."</td>";
             echo "<td align='center'>".$pres['Dosage']."</td>";
             echo "<td align='center'>".$pres['Refill']."</td>";
+            echo "<td align='center'>".$pres['Expiration_date']."</td>";
+
+            $current_time = date("Y-m-d H:i:s");
+
+            if($current_time > $pres['Expiration_date']) {
+                echo "<td align='center'> Yes </td>";
+            } else {
+                echo "<td align='center'> No </td>";
+            }
 
             $sql_doc = mysqli_query($conn, "SELECT * FROM Doctors WHERE NPI='$pres[Prescribing_doc]';");
             $doc = mysqli_fetch_assoc($sql_doc);
