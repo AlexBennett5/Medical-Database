@@ -3,6 +3,10 @@
     
 <link rel="stylesheet" type = "text/css" href="css/login_style.css" />
 
+<head>
+    <title>Login Options</title>
+</head>
+
 <nav> 
         <p>UH Medical Clinic</p>
         <ul>
@@ -24,7 +28,7 @@
     
     <body>
         
-        <center> <input type = "radio" name = "choose" value = "Doctor" onclick = "document.location.href = 'doc_index.html'") /> Doctor </center><br>
+        <center> <input type = "radio" name = "choose" value = "Doctor" onclick = "document.location.href = 'doc_login.php'") /> Doctor </center><br>
         <center> <input type = "radio" name = "choose" value = "Patient" onclick = "document.location.href = 'patient_login.php'" /> Patient </center><br> 
 		 <center> <input type = "radio" name = "choose" value = "Nurse" onclick = "document.location.href = 'nurse_login.php'" /> Nurse </center><br>
 	   <center> <input type = "radio" name = "choose" value = "Admin" onclick = "document.location.href = 'admin_index.php'" /> Admin </center>

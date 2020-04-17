@@ -6,7 +6,7 @@
 
 <html>
 <head>
-<title>Upcoming Appointments</title>
+<title>Patient Records</title>
 </head>
 <body>
 
@@ -26,15 +26,13 @@
         </ul>
 </nav>
 
-Check your upcoming appointments for the following range:<br><br>
+Search for a patient<br><br>
 <form action='' method='POST'>
-<label for='low'>From:</label>
-<input type='datetime-local' step=1800 value='2020-01-01T08:00' name='low'><br>
-<label for='high'>To:</label>
-<input type='datetime-local' step=1800 value='2020-01-01T08:00' name='high'><br>
-<label for='search_some'>Search Range</label>
-<input type='radio' id='search_some' value=0 name='search'><br>
-<label for='search_all'>Display all Appointments</label>
+<label for='PID'>Enter patient PID:</label>
+<input type='text' minlength='6' maxlength ='6' name='PID'><br><br>
+<label for='search_some'>Search from PID</label>
+<input type='radio' id='search_pid' value=0 name='search'><br>
+<label for='search_all'>Display your current patients</label>
 <input type='radio' id='search_all' value=1 name='search'><br>
 <input type='submit' name='submit' value='submit'>
 </form><br><br>
@@ -43,24 +41,25 @@ Check your upcoming appointments for the following range:<br><br>
 
     if(isset($_POST['submit'])) {
 
-        $dt_low = substr($_POST['low'],0,10).' '.substr($_POST['low'],11).':00';
-        $dt_high = substr($_POST['high'],0,10).' '.substr($_POST['high'],11).':00';
-        $low = new DateTime($dt_low);
-        $high = new DateTime($dt_high);
+        $sql_pid = mysqli_query($conn, "SELECT * FROM Patients WHERE PID=".$_POST['PID'].";");
 
+        if ($sql_pid == FALSE && $_POST['search'] == 0) {
 
-
-        if ($_POST['search'] == 0 && $low >= $high) {
-            echo "Invalid time interval."; 
-        
-        } elseif ($_POST['search'] == 0) {
-
-            print_apmt_range($dt_low, $dt_high, $_SESSION['User_ID']);
+            echo "No patient found";
 
         } else {
+            if ($_POST['search'] == 0) {
+            
+                gen_patient_info($_POST['PID']);
+                echo"<br>";
+                gen_prescriptions($_POST['PID']);
 
-            print_apmt_range('1000-01-01 00:00:00', '9999-12-31 00:00:00', $_SESSION['User_ID']);
-        }
+            } else {
+
+                gen_patient_info_doctor($_SESSION['User_ID']);
+            }                
+
+        } 
 
     }
 

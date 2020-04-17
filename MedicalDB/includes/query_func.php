@@ -71,6 +71,58 @@
         echo "<p><input type='datetime-local' step=1800 value='2020-01-01T08:00' name='Time' required></p><br>";
     }
 
+    function print_apmt($Apmt_ID, $Doc_ID) {
+
+        $conn = sql_connect();
+
+        $sql_apmt = mysqli_query($conn, "SELECT * FROM Appointments WHERE Appt_ID=".$Apmt_ID." AND Doctor_ID=".$Doc_ID.";") or die(mysqli_error($conn));
+        $apmt = mysqli_fetch_assoc($sql_apmt);
+
+        $sql_doc = mysqli_query($conn, "SELECT * FROM Doctors WHERE NPI=".$apmt['Doctor_ID'].";") or die(mysqli_error($conn));
+        $sql_patient = mysqli_query($conn, "SELECT * FROM Patients WHERE PID=".$apmt['Patient_ID'].";") or die(mysqli_error($conn));
+        $sql_clinic = mysqli_query($conn, "SELECT * FROM Clinics WHERE Clinic_ID=".$apmt['Clinic_ID'].";") or die(mysqli_error($conn));
+
+        $doc = mysqli_fetch_assoc($sql_doc);
+        $patient = mysqli_fetch_assoc($sql_patient);
+        $clinic = mysqli_fetch_assoc($sql_clinic);
+
+        echo "<tr><td> ".$Apmt_ID." </td>";
+        echo "<td> ".$doc['Name']." (".$doc['NPI'].") </td>";
+        echo "<td> ".$patient['Last_Name'].", ".$patient['First_Name']." (".$patient['PID'].") </td>";
+        echo "<td> ".$apmt['Has_approval']." </td>";
+        echo "<td> ".$clinic['Clinic_name']." </td>";
+        echo "<td> ".$apmt['Appointment_time']." </td>";
+
+    }
+
+    function print_apmt_range($low, $high, $Doc_ID) {
+
+        $conn = sql_connect();
+
+        $sql_apmt = mysqli_query($conn, "SELECT * FROM Appointments WHERE Doctor_ID=".$Doc_ID." AND Appointment_time >= '".$low."' AND Appointment_time <= '".$high."';") or die(mysqli_error($conn));
+
+        if (mysqli_num_rows($sql_apmt) == 0) {
+
+            echo "No appointments found in this range";
+
+        } else {
+
+            echo "<table><tr><th> Apmt ID </th>";
+            echo "<th> Doctor (NPI) </th>";
+            echo "<th> Patient (PID)</th>";
+            echo "<th> Has approval? </th>";
+            echo "<th> Location </th>";
+            echo "<th> Appointment Time </th></tr>";
+
+            while($apmt = mysqli_fetch_assoc($sql_apmt)) {
+
+                print_apmt($apmt['Appt_ID'], $Doc_ID);
+            }
+
+        }
+
+    }
+
     // ~~~PATIENT INFO LOGIC~~~ //
 
     //Displays patient info (Demo, Med Hist, etc.) for choosen PID
@@ -162,6 +214,7 @@
 
         if (mysqli_num_rows($sql_pres)==0) {
             echo "No prescriptions";
+            return;
         }
 
         echo "<table><tr><th> Drug </th>";

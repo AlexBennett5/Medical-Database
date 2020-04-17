@@ -16,3 +16,7 @@ body{
     font-family: sans-serif;
     color: black;
 }
+
+input[type = 'button']{
+    transform: scale(1.5);
+}

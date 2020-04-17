@@ -1,0 +1,86 @@
+
+#heading{
+    font-size:60px;
+}
+/* Add a black background color to the top navigation */
+.topnav {
+    padding:0%;
+    width:100%;
+    background-color: #333;
+    overflow: hidden;
+    }
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 20px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+
+
+                body{
+                background-image: url("contact.jpg");
+                background-repeat: no-repeat;
+                background-size:contain;
+                font-family:"Times New Roman";
+                font-size:20px;
+                
+                }
+                *{box-sizing:content-box}
+                input[type=tel]{
+                width:25%;
+                padding:12px;
+                border:1px solid black;
+                border-radius:4px;
+                box-sizing:content-box;
+                margin-top: 4px;
+                margin-bottom:14px;
+                resize:vertical;  
+    
+                }
+            
+            input[type=text], select, textarea{
+                width:25%;
+                padding:12px;
+                border:1px solid black;
+                border-radius:4px;
+                box-sizing:content-box;
+                margin-top: 4px;
+                margin-bottom:14px;
+                resize:vertical;        
+            }
+            
+            input[type=submit]{
+                background-color:white;
+                color:lightgray;
+                padding:12px 20px;
+                border:none;
+                border-radius:4px;
+                cursor:pointer;
+                text-align: center;
+                font-size:20px;
+            }
+            
+            input[type=submit]:hover{
+                background:#45a049;
+            }
+                
+                
+                }
+            

@@ -9,7 +9,7 @@
 	<title>Medical Info</title>
 </head>
 <body>
-<link rel="stylesheet" type = "text/css" href="css/default.css" />
+<link rel="stylesheet" type = "text/css" href="css/patient_info_style.css" />
 <nav> 
         <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
         <ul>

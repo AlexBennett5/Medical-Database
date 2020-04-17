@@ -1,8 +1,5 @@
 body{
-    background-image: url("nurse.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    
+    background-color: slategray;
 }
 
 *{
@@ -14,7 +11,7 @@ body{
 
 .box{
     width: 400px;
-    height: 180px;
+    height: 200px;
     background: #fff;
     top: 50%;
     left: 50%;

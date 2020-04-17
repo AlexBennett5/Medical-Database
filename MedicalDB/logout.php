@@ -16,7 +16,7 @@
 </head>
 <body>
 
-<link rel="stylesheet" type="text/css" href="css/default.css" />
+<link rel="stylesheet" type="text/css" href="css/logout_style.css" />
 
 <nav> 
         <p>UH Medical Clinic</p>

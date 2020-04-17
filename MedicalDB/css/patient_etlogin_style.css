@@ -1,8 +1,6 @@
+
 body{
-    background-image: url("login.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    
+    background-color: #BBECFA;
 }
 
 *{
@@ -12,12 +10,11 @@ body{
     padding: 0;
 }
 
-
 .box{
-    width: 420px;
-    height: 220px;
+    width: 400px;
+    height: 260px;
     background: #fff;
-    top: 20%;
+    top: 30%;
     left: 50%;
     position: absolute;
     transform: translate(-50%, -50%);

@@ -216,9 +216,9 @@ INSERT INTO Appointments VALUES (NULL, 'Yes', '2020-01-01 08:00:00', 1234567890,
 CREATE TABLE Actions (
 	Action_ID INT NOT NULL AUTO_INCREMENT,
 	User_Type ENUM('Admin','Patient','Nurse','Doctor') NOT NULL,
-	User_ID INT NOT NULL,
+	User_ID BIGINT NOT NULL,
 	Action_Type ENUM('Logged In', 'Logged Out', 'Created New Patient', 'Modified Record', 'Scheduled Appointment', 'Prescription Written') NOT NULL,
-	Record_Modified_ID INT NULL,
+	Record_Modified_ID BIGINT NULL,
 	Action_Time DATETIME NOT NULL,
 	PRIMARY KEY (Action_ID)
 );

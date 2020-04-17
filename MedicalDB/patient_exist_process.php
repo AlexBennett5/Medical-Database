@@ -58,7 +58,7 @@
 		    	$_SESSION['GP_ID'] = $doc['NPI'];
 		    }
 
-		    record_action("Patient", $_SESSION['PID'], "Logged In", $_SESSION['PID']);
+		    record_action("Patient", $_SESSION['User_ID'], "Logged In", $_SESSION['User_ID']);
 
 		    header("location:patient_portal.php");
 

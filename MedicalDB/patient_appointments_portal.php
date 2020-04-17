@@ -7,7 +7,7 @@
 <head>
 	<title>Appointment Scheduler</title>
 </head>
-<link rel="stylesheet" type = "text/css" href="css/default.css" />
+<link rel="stylesheet" type = "text/css" href="css/patient_appointments_portal_style.css" />
 
 <body>
 <nav> 

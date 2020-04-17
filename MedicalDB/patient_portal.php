@@ -1,7 +1,7 @@
 <?php
     include_once "includes/dbh.php";
     include_once "includes/session_check.php";
-    include_once "includes/query_func.php"
+    include_once "includes/query_func.php";
 ?>
 
 <html>
@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<link rel="stylesheet" type = "text/css" href="css/default.css" />
+<link rel="stylesheet" type = "text/css" href="css/patient_portal_style.css" />
 <nav> 
         <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
         <ul>

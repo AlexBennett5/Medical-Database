@@ -9,7 +9,7 @@
 	<title>Prescription Info</title>
 </head>
 <body>
-<link rel="stylesheet" type = "text/css" href="css/default.css" />
+<link rel="stylesheet" type = "text/css" href="css/patient_prescript_style.css" />
 <nav> 
         <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
         <ul>
