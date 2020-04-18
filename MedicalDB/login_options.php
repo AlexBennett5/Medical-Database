@@ -28,10 +28,10 @@
     
     <body>
         
-        <center> <input type = "radio" name = "choose" value = "Doctor" onclick = "document.location.href = 'doc_login.php'") /> Doctor </center><br>
+        <center> <input type = "radio" name = "choose" value = "Doctor" onclick = "document.location.href = 'doc_login.php'" /> Doctor </center><br>
         <center> <input type = "radio" name = "choose" value = "Patient" onclick = "document.location.href = 'patient_login.php'" /> Patient </center><br> 
 		 <center> <input type = "radio" name = "choose" value = "Nurse" onclick = "document.location.href = 'nurse_login.php'" /> Nurse </center><br>
-	   <center> <input type = "radio" name = "choose" value = "Admin" onclick = "document.location.href = 'admin_index.php'" /> Admin </center>
+	   <center> <input type = "radio" name = "choose" value = "Admin" onclick = "document.location.href = 'admin_login.php'" /> Admin </center>
 
     </body>
 </div>

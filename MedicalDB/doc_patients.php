@@ -10,22 +10,23 @@
 </head>
 <body>
 
-<link rel="stylesheet" type = "text/css" href="css/default.css" />
-<nav> 
-        <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
-        <ul>
-            <li><a href="#">≡</a>
-                <ul>
-                    <li><a href="doc_portal.php">Home</a></li>
-                    <li><a href="doc_appointments.php">View Your Upcoming Appointments</a></li>
-                    <li><a href="doc_patients.php">Check your patients' files</a></li>
-                    <li><a href="doc_prescript.php">Write prescription</a></li>
-                    <li><a href="logout.php">Logout</a></li>
-                </ul>
-            </li>
-        </ul>
-</nav>
-
+<link rel="stylesheet" type = "text/css" href="css/doc_patients_style.css" />
+<body class="loggedin">
+    <nav class="navtop">
+        <div>
+            <h1>Logged in as <?php echo $_SESSION['Name'] ?></h1>
+            <a href="doc_portal.php">Home</a>
+            <a href="doc_appointments.php">View Upcoming Appointments</a>
+            <a href="doc_patients.php">Check Your Patients Files</a>
+            <a href="doc_prescript.php">Write Prescription</a>
+            <a href="logout.php">Logout</a>
+        </div>
+    </nav>
+<center><div class="content">
+    <h2>Patient Records</h2>
+</div></center>
+<div class="box">
+<center>
 Search for a patient<br><br>
 <form action='' method='POST'>
 <label for='PID'>Enter patient PID:</label>
@@ -34,8 +35,10 @@ Search for a patient<br><br>
 <input type='radio' id='search_pid' value=0 name='search'><br>
 <label for='search_all'>Display your current patients</label>
 <input type='radio' id='search_all' value=1 name='search'><br>
-<input type='submit' name='submit' value='submit'>
+<input type='submit' name='submit' value='Submit'>
 </form><br><br>
+</center>
+</div>
 
 <?php
 

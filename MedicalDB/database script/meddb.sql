@@ -222,3 +222,13 @@ CREATE TABLE Actions (
 	Action_Time DATETIME NOT NULL,
 	PRIMARY KEY (Action_ID)
 );
+
+CREATE TABLE Admin (
+	Admin_ID INT NOT NULL AUTO_INCREMENT,
+	Name VARCHAR(100) NOT NULL,
+	Email VARCHAR(80) NOT NULL,
+	Password VARCHAR(80) NOT NULL,
+	PRIMARY KEY (Admin_ID)
+);
+ALTER TABLE Admin AUTO_INCREMENT=1101;
+INSERT INTO Admin VALUES (NULL, 'Tom Swiney', 'admin@admin.com', 'password')

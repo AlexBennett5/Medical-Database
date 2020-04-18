@@ -6,7 +6,7 @@
 
 <html>
 <head>
-<title>Admin Portal</title>
+<title>Modify Doctor Record</title>
 </head>
 <body>
 
@@ -16,18 +16,14 @@
         <ul>
             <li><a href="#">≡</a>
                 <ul>
-                	<li><a href="admin_mod_portal.php">Modify Records</a>
-                	<li><a href="admin_report.php">View reports </a>
+                    <li><a href="admin_mod_portal.php">Modify Records</a>
+                    <li><a href="admin_report.php">View reports </a>
                     <li><a href="logout.php">Logout</a></li>
                 </ul>
             </li>
         </ul>
 </nav>
 
-
-<center>You are currently logged in as <?php echo $_SESSION['Name'] ?><br>
-		Your Admin ID is <?php echo $_SESSION['User_ID'] ?><br>
-		You are logged in as an <?php echo $_SESSION['User_Type'] ?><br>
-</center>
-
-</body>
+<form action='admin_mod_doctor_result.php' method='POST'>
+<?php mod_doctor($_POST['NPI']); ?>
+<input type='submit' value='submit'></form>

@@ -3,7 +3,7 @@
 <head>
 	<title> Patient Login </title>
 </head>
-<link rel="stylesheet" type="text/css" href="css/patient_login_style.css" />
+<link rel="stylesheet" type="text/css" href="css/default.css" />
 
 <nav> 
         <p>UH Medical Clinic</p>

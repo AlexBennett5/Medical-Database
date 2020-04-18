@@ -266,6 +266,230 @@
 
     }
 
+    // ~~MODIFY LOGIC~~
+
+    //Generates modify patient record form (sans form heading w/ method/action) for given PID
+    function mod_patient($PID) {
+
+        $conn = sql_connect();
+        $sql_patient = mysqli_query($conn, "SELECT * FROM Patients WHERE PID=".$PID.";");
+        $patient = mysqli_fetch_assoc($sql_patient);
+
+        $sql_demo = mysqli_query($conn, "SELECT * FROM Demographics WHERE Demo_ID=".$patient['Demographics_ID'].";") or die(mysqli_error($conn));
+        $demo = mysqli_fetch_assoc($sql_demo);
+
+        $sql_med = mysqli_query($conn, "SELECT * FROM Medical_history WHERE Med_Hist_ID=".$patient['Med_Hist_ID'].";") or die(mysqli_error($conn));
+        $med = mysqli_fetch_assoc($sql_med);
+
+        $sql_fam = mysqli_query($conn, "SELECT * FROM Family_history WHERE Fam_Hist_ID=".$patient['Fam_Hist_ID'].";") or die(mysqli_error($conn));
+        $fam = mysqli_fetch_assoc($sql_fam);
+
+        echo "You are modifying the record of ".$patient['First_Name']." ".$patient['Last_Name']." (".$PID.")<br><br>";
+
+        echo "<input type='hidden' name='PID' value=".$PID.">";
+
+        echo "<label for='First_Name'> First name: </label>";
+        echo "<input type='text' name='First_Name' value=".$patient['First_Name']."><br>";
+
+        echo "<label for='Last_Name'> First name: </label>";
+        echo "<input type='text' name='Last_Name' value=".$patient['Last_Name']."><br>";
+
+        echo "<label for='SSN'> Last 4 Digits SSN: </label>";
+        echo "<input type='text' minlength=4 maxlength=4 name='SSN' value=".$patient['Last_4_SSN']."><br>";
+
+        echo "<label for='Age'> Age: </label>";
+        echo "<input type='number' min='0' max='120' name='Age' value=".$demo['Age']."><br>";
+
+        echo "<label for='DOB'> Date of Birth: </label>";
+        echo "<input type='date' name='DOB' value=".$demo['Date_of_birth']."><br>";
+
+        echo "Ethnicity. Current value: ".$demo['Ethnicity']."<br>";
+        echo "<label for='Asian/Pacific Islander'>Asian/Pacific Islander</label>";
+        echo "<input type='radio' name='ethnicity' value='Asian/Pacific Islander' required><br>";
+        echo "<label for='African-American'>African-American</label>";
+        echo "<input type='radio' name='ethnicity' value='African-American'><br>";
+        echo "<label for='Native American'>Native American</label>";
+        echo "<input type='radio' name='ethnicity' value='Native American'><br>";
+        echo "<label for='White'>White</label>";
+        echo "<input type='radio' name='ethnicity' value='White'><br>";
+        echo "<label for='Hispanic'>Hispanic</label>";
+        echo "<input type='radio' name='ethnicity' value='Hispanic'><br>";
+        echo "<label for='Other'>Other</label>";
+        echo "<input type='radio' name='ethnicity' value='Other'><br><br>";
+
+        echo "Marital Status. Current value: ".$demo['Marital_status']."<br>";
+        echo "<label for='Single'>Single</label>";
+        echo "<input type='radio' name='marital' value='Single' required><br>";
+        echo "<label for='Married'>Married</label>";
+        echo "<input type='radio' name='marital' value='Married'><br>";
+        echo "<label for='Widowed'>Widowed</label>";
+        echo "<input type='radio' name='marital' value='Widowed'><br>";
+        echo "<label for='Divorced'>Divorced</label>";
+        echo "<input type='radio' name='marital' value='Divorced'><br>";
+        echo "<label for='Separated'>Separated</label>";
+        echo "<input type='radio' name='marital' value='Separated'><br><br>";
+
+        echo "<label for='home_phone'>Home phone:</label>";
+        echo "<input type='tel' name='home_phone' pattern='\([0-9]{3}\) [0-9]{3}-[0-9]{4}' value='".$demo['Home_phone']."'>";
+        echo "<small> Format: (123) 345-1234</small><br>";
+
+        echo "<label for='cell_phone'>Cell phone:</label>";
+        echo "<input type='tel' name='cell_phone' pattern='\([0-9]{3}\) [0-9]{3}-[0-9]{4}' value='".$demo['Cell_phone']."'>";
+        echo "<small> Format: (123) 345-1234</small><br>";
+
+        echo "<label for='work_phone'>Work phone:</label>";
+        echo "<input type='tel' name='work_phone' pattern='\([0-9]{3}\) [0-9]{3}-[0-9]{4}' value='".$demo['Work_phone']."'>";
+        echo "<small> Format: (123) 345-1234</small><br>";
+
+        echo "<label for='email'>Email address:</label>";
+        echo "<input type='text' maxlength=80 name='email' value=".$demo['Email']."><br><br>";        
+
+        echo "<label for='allergies'>Allergies:</label>";
+        echo "<textarea name='allergies' maxlength='225' rows='4' cols='50'>".$demo['Allergies']."</textarea><br><br>";
+
+        echo "<label for='prev_cond'>Previous Conditions:</label>";
+        echo "<textarea name='prev_cond' maxlength='225' rows='4' cols='50'>".$med['Prev_conditions']."</textarea><br><br>";
+
+        echo "<label for='past_surg'>Past Surgeries:</label>";
+        echo "<textarea name='past_surg' maxlength='225' rows='4' cols='50'>".$med['Past_surgeries']."</textarea><br><br>";
+
+        echo "<label for='past_prescript'>Previous Prescriptions:</label>";
+        echo "<textarea name='past_prescript' maxlength='225' rows='4' cols='50'>".$med['Past_prescriptions']."</textarea><br><br>";
+
+        echo "<label for='family_hist'>Family History:</label>";
+        echo "<textarea name='family_hist' maxlength='225' rows='4' cols='50'>".$fam['Fam_History']."</textarea><br><br>";
+
+    }
+
+    //Generates modify nurse record form (sans form heading w/ method/action) for given NID
+    function mod_nurse($NID) {
+
+        $conn = sql_connect();
+        $sql_nurse = mysqli_query($conn, "SELECT * FROM Nurses WHERE NID=".$NID.";");
+        $nurse = mysqli_fetch_assoc($sql_nurse);
+
+        echo "You are modifying the record of ".$nurse['Name']." (".$NID.")<br><br>";
+
+        echo "<input type='hidden' name='NID' value=".$NID.">";
+
+        echo "<label for='Name'> Name: </label>";
+        echo "<input type='text' name='Name' value='".$nurse['Name']."'><br>";
+
+        echo "<label for='job_desc'>Job Description:</label>";
+        echo "<textarea name='job_desc' maxlength='225' rows='4' cols='50'>".$nurse['Job_description']."</textarea><br><br>";
+
+
+    }
+
+    //Generates modify doctor record form (sans form heading w/ method/action) for given NPI
+    function mod_doctor($NPI) {
+
+        $conn = sql_connect();
+        $sql_doctor = mysqli_query($conn, "SELECT * FROM Doctors WHERE NPI=".$NPI.";");
+        $doctor = mysqli_fetch_assoc($sql_doctor);
+
+        echo "You are modifying the record of ".$doctor['Name']." (".$NPI.")<br><br>";
+
+        echo "<input type='hidden' name='NPI' value=".$NPI.">";
+
+        echo "<label for='Name'> Name: </label>";
+        echo "<input type='text' name='Name' value='".$doctor['Name']."'><br>";
+
+        echo "<label for='work_phone'>Work phone:</label>";
+        echo "<input type='tel' name='work_phone' pattern='\([0-9]{3}\) [0-9]{3}-[0-9]{4}' value='".$doctor['Work_phone']."'>";
+        echo "<small> Format: (123) 345-1234</small><br>";
+
+        echo "<label for='fax'>Fax:</label>";
+        echo "<input type='tel' name='fax' pattern='\([0-9]{3}\) [0-9]{3}-[0-9]{4}' value='".$doctor['Fax']."'>";
+        echo "<small> Format: (123) 345-1234</small><br>";
+
+        echo "<label for='email'>Email address:</label>";
+        echo "<input type='text' maxlength=80 name='email' value=".$doctor['Email']."><br><br>";
+
+        echo "Specialist? Current value: ".$doctor['Specialist']."<br>";
+        echo "<label for='Yes'>Yes</label>";
+        echo "<input type='radio' name='Specialist' value='Yes' required><br>";
+        echo "<label for='No'>No</label>";
+        echo "<input type='radio' name='Specialist' value='No'><br>";
+
+        echo "<label for='Specialization'> Specialization: </label>";
+        echo "<input type='text' name='Specialization' value='".$doctor['Specialization']."'><br>";
+
+    }
+
+    //Generates list of patient names to modify
+    function gen_mod_patient_list() {
+
+        $conn = sql_connect();
+        $sql_patient = mysqli_query($conn, "SELECT * FROM Patients ORDER BY Last_Name");
+
+        echo "<table><tr><th> PID </th>";
+        echo "<th> Last Name </th>";
+        echo "<th> First Name </th>";
+        echo "<th> Action </th></tr>";
+
+        while($patient = mysqli_fetch_assoc($sql_patient)) {
+
+            echo "<tr><td> ".$patient['PID']." </td>";
+            echo "<td> ".$patient['Last_Name']." </td>";
+            echo "<td> ".$patient['First_Name']." </td>";
+            echo "<td><form action='admin_mod_patient_process.php' method='POST'>";
+            echo "<input type='hidden' name='PID' value=".$patient['PID'].">";
+            echo "<input type='submit' name='Modify Record'></form></td></tr>";
+
+        }
+
+        echo "</table>";
+
+    }
+
+    //Generates list of nurse names to modify
+    function gen_mod_nurse_list() {
+
+        $conn = sql_connect();
+        $sql_nurse = mysqli_query($conn, "SELECT * FROM Nurses ORDER BY Name");
+
+        echo "<table><tr><th> NID </th>";
+        echo "<th> Name </th>";
+        echo "<th> Action </th></tr>";
+
+        while($nurse = mysqli_fetch_assoc($sql_nurse)) {
+
+            echo "<tr><td> ".$nurse['NID']." </td>";
+            echo "<td> ".$nurse['Name']." </td>";
+            echo "<td><form action='admin_mod_nurse_process.php' method='POST'>";
+            echo "<input type='hidden' name='NID' value=".$nurse['NID'].">";
+            echo "<input type='submit' name='Modify Record'></form></td></tr>";
+
+        }
+
+        echo "</table>";
+
+    }
+
+    //Generates list of doctor names to modify
+    function gen_mod_doctor_list() {
+
+        $conn = sql_connect();
+        $sql_doctor = mysqli_query($conn, "SELECT * FROM Doctors ORDER BY Name");
+
+        echo "<table><tr><th> NID </th>";
+        echo "<th> Name </th>";
+        echo "<th> Action </th></tr>";
+
+        while($doctor = mysqli_fetch_assoc($sql_doctor)) {
+
+            echo "<tr><td> ".$doctor['NPI']." </td>";
+            echo "<td> ".$doctor['Name']." </td>";
+            echo "<td><form action='admin_mod_doctor_process.php' method='POST'>";
+            echo "<input type='hidden' name='NPI' value=".$doctor['NPI'].">";
+            echo "<input type='submit' name='Modify Record'></form></td></tr>";
+        }
+
+        echo "</table>";        
+
+    }
+
     // ~~~ACTION/REPORT LOGIC~~~
 
     //Records user action

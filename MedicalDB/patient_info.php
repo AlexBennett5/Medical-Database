@@ -11,23 +11,28 @@
 <body>
 <link rel="stylesheet" type = "text/css" href="css/patient_info_style.css" />
 <nav> 
-        <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
+    <p>UH Medical Clinic<p>
         <ul>
-            <li><a href="#">≡</a>
-                <ul>
-                    <li><a href="patient_portal.php">Home</a></li>
-                    <li><a href="patient_info.php">Check your Medical Information</a></li>
-                    <li><a href="patient_prescript.php">Check your Prescriptions</a></li>
-                    <li><a href="patient_appointments_portal.php">Schedule an appointment</a></li>
-                    <li><a href="logout.php">Logout</a></li>
-                </ul>
-            </li>
+                <li><a href="patient_portal.php">Home</a></li>
+                <li><a href="patient_info.php">View Medical Information</a></li>
+                <li><a href="patient_prescript.php">View Prescriptions</a></li>
+                <li><a href="patient_appointments_portal.php">Book Appointment</a></li>
+                <li><a href="logout.php">Logout</a></li>
         </ul>
 </nav>
+<br>
+<div class="session">Logged in as <?php echo $_SESSION['Name'] ?></div>
+<br>
 
 <p><h2> Your current medical record: </h2></p><br><br>
 
 <?php
     gen_patient_info($_SESSION['User_ID']);
 ?>
+
+<br><br>
+
+<form action="patient_mod.php" method="POST">
+<input type='submit' value='Modify Your Information'>
+</form>
 

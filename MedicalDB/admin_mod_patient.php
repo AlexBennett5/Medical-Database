@@ -6,7 +6,7 @@
 
 <html>
 <head>
-<title>Admin Portal</title>
+<title>Modify Patient Record</title>
 </head>
 <body>
 
@@ -16,18 +16,19 @@
         <ul>
             <li><a href="#">≡</a>
                 <ul>
-                	<li><a href="admin_mod_portal.php">Modify Records</a>
-                	<li><a href="admin_report.php">View reports </a>
+                    <li><a href="admin_mod_portal.php">Modify Records</a>
+                    <li><a href="admin_report.php">View reports </a>
                     <li><a href="logout.php">Logout</a></li>
                 </ul>
             </li>
         </ul>
 </nav>
 
+Enter PID of record you want to edit<br><br>
 
-<center>You are currently logged in as <?php echo $_SESSION['Name'] ?><br>
-		Your Admin ID is <?php echo $_SESSION['User_ID'] ?><br>
-		You are logged in as an <?php echo $_SESSION['User_Type'] ?><br>
-</center>
+<form action='admin_mod_patient_process.php' method="POST">
+<input type="text" name="PID">
+<input type="submit" value="search">
+</form><br><br>
 
-</body>
+<?php gen_mod_patient_list() ?>

@@ -6,10 +6,10 @@
 
 <html>
 <head>
-    <title>Prescription Info</title>
+	<title>Medical Info</title>
 </head>
 <body>
-<link rel="stylesheet" type = "text/css" href="css/patient_prescript_style.css" />
+<link rel="stylesheet" type = "text/css" href="css/patient_info_style.css" />
 <nav> 
     <p>UH Medical Clinic<p>
         <ul>
@@ -23,10 +23,7 @@
 <br>
 <div class="session">Logged in as <?php echo $_SESSION['Name'] ?></div>
 <br>
-<h2> Prescription Record </h2><br>
 
-<?php
-    gen_prescriptions($_SESSION['User_ID']);
-?>
-
-</body>
+<form action='patient_mod_result.php' method='POST'>
+<?php mod_patient($_SESSION['User_ID']); ?>
+<input type='submit' value='submit'></form>
