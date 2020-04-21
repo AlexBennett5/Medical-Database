@@ -9,9 +9,9 @@
     <title>Prescription Info</title>
 </head>
 <body>
-<link rel="stylesheet" type = "text/css" href="css/patient_prescript_style.css" />
+<link rel="stylesheet" type = "text/css" href="css/patient_portal_style.css" />
 <nav> 
-    <p>UH Medical Clinic<p>
+        <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
         <ul>
                 <li><a href="patient_portal.php">Home</a></li>
                 <li><a href="patient_info.php">View Medical Information</a></li>
@@ -20,8 +20,6 @@
                 <li><a href="logout.php">Logout</a></li>
         </ul>
 </nav>
-<br>
-<div class="session">Logged in as <?php echo $_SESSION['Name'] ?></div>
 <br>
 <h2> Prescription Record </h2><br>
 

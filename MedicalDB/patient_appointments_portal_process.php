@@ -8,24 +8,20 @@
 <html>
 <head>
     <title>Appointment Scheduler</title>
-<link rel="stylesheet" type = "text/css" href="css/default.css" />
+<link rel="stylesheet" type = "text/css" href="css/patient_portal_style.css" />
 </head>
 <body>
 <nav> 
         <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
         <ul>
-            <li><a href="#">≡</a>
-                <ul>
-                    <li><a href="patient_portal.php">Home</a></li>
-                    <li><a href="patient_info.php">Check your Medical Information</a></li>
-                    <li><a href="patient_prescript.php">Check your Prescriptions</a></li>
-                    <li><a href="patient_appointments_portal.php">Schedule an appointment</a></li>
-                    <li><a href="logout.php">Logout</a></li>
-                </ul>
-            </li>
+                <li><a href="patient_portal.php">Home</a></li>
+                <li><a href="patient_info.php">View Medical Information</a></li>
+                <li><a href="patient_prescript.php">View Prescriptions</a></li>
+                <li><a href="patient_appointments_portal.php">Book Appointment</a></li>
+                <li><a href="logout.php">Logout</a></li>
         </ul>
 </nav>
-
+<br>
 <?php
 
     if(isset($_POST['submit'])) {

@@ -10,22 +10,21 @@
 </head>
 <body>
 
-<link rel="stylesheet" type = "text/css" href="css/doc_patients_style.css" />
-<body class="loggedin">
-    <nav class="navtop">
-        <div>
-            <h1>Logged in as <?php echo $_SESSION['Name'] ?></h1>
-            <a href="doc_portal.php">Home</a>
-            <a href="doc_appointments.php">View Upcoming Appointments</a>
-            <a href="doc_patients.php">Check Your Patients Files</a>
-            <a href="doc_prescript.php">Write Prescription</a>
-            <a href="logout.php">Logout</a>
-        </div>
-    </nav>
-<center><div class="content">
-    <h2>Patient Records</h2>
-</div></center>
-<div class="box">
+<link rel="stylesheet" type = "text/css" href="css/doc_portal_style.css" />
+<nav>
+    <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
+        <ul>
+            <li><a href="doc_portal.php">Home</a></li>
+            <li><a href="doc_appointments.php">View Upcoming Appointments</a></li>
+            <li><a href="doc_patients.php">Check Your Patients Files</a></li>
+            <li><a href="doc_prescript.php">Write Prescription</a></li>
+            <li><a href="doc_reports.php">Demographic Reports </a></li>
+            <li><a href="logout.php">Logout</a></li>
+        </ul>
+</nav>
+<br>
+<h2>Patient Records</h2>
+
 <center>
 Search for a patient<br><br>
 <form action='' method='POST'>
@@ -38,7 +37,6 @@ Search for a patient<br><br>
 <input type='submit' name='submit' value='Submit'>
 </form><br><br>
 </center>
-</div>
 
 <?php
 
@@ -54,8 +52,12 @@ Search for a patient<br><br>
             if ($_POST['search'] == 0) {
             
                 gen_patient_info($_POST['PID']);
-                echo"<br>";
+                echo "<br>";
                 gen_prescriptions($_POST['PID']);
+                echo "<br>";
+                echo "<form action='doc_patients_mod.php' method='POST'>";
+                echo "<input type='hidden' name='PID' value=".$_POST['PID'].">";
+                echo "<input type='submit' value='Modify Patient Record'></form>";
 
             } else {
 

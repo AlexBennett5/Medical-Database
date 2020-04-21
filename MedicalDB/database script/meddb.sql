@@ -37,12 +37,24 @@ CREATE TABLE Demographics (
     PRIMARY KEY (Demo_ID)
 );
 ALTER TABLE Demographics AUTO_INCREMENT = 1001;
+
+DROP TRIGGER IF EXISTS `no_work_phone`;
+DELIMITER $$
+CREATE TRIGGER `no_work_phone` BEFORE INSERT ON `Demographics` 
+FOR EACH ROW BEGIN
+	IF (NEW.Work_phone IS NULL) THEN 
+      SET NEW.Work_phone = NEW.Cell_phone;
+	END IF;
+END $$
+DELIMITER ;
+
+INSERT INTO Demographics VALUES (NULL, 'Yes', 75, '1945-01-01', 'M', 'Other', 'Widowed', '(713) 123-3645', '(713) 888-8888', NULL, 'takeshi@patient.com', 'Tree pollen');
 INSERT INTO Demographics VALUES (NULL, 'Yes', 28, '1992-01-01', 'M', 'Hispanic', 'Single', '(713) 123-1241', NULL, NULL, 'hou@patient.com', 'Peanuts');
 INSERT INTO Demographics VALUES (NULL, 'Yes', 31, '1989-01-01', 'F', 'White', 'Divorced', '(713) 123-5647', NULL, NULL, 'chantal@patient.com', NULL);
 INSERT INTO Demographics VALUES (NULL, 'Yes', 58, '1962-01-01', 'F', 'Native American', 'Married', '(713) 123-7568', NULL, NULL, 'lucretia@patient.com', NULL);
 INSERT INTO Demographics VALUES (NULL, 'Yes', 17, '2003-01-01', 'M', 'African-American', 'Single', '(713) 123-3465', NULL, NULL, 'jonathan@patient.com', NULL);
 INSERT INTO Demographics VALUES (NULL, 'Yes', 20, '2000-01-01', 'M', 'Asian/Pacific Islander', 'Single', '(713) 123-7475', NULL, NULL, 'aleksei@patient.com', 'Cilantro');
-INSERT INTO Demographics VALUES (NULL, 'Yes', 75, '1945-01-01', 'M', 'Other', 'Widowed', '(713) 123-3645', NULL, NULL, 'takeshi@patient.com', 'Tree pollen');
+
 
 CREATE TABLE Medical_history (
 	Med_Hist_ID INT NOT NULL AUTO_INCREMENT,
@@ -72,14 +84,15 @@ CREATE TABLE Nurses (
 	NID INT NOT NULL UNIQUE,
     Password VARCHAR(80) NOT NULL,
     Name VARCHAR(80) NOT NULL,
+    Email VARCHAR(80) NOT NULL,
     Job_description VARCHAR(225) NULL,
     PRIMARY KEY (NID)
 );
-INSERT INTO Nurses VALUES (34534, 'password', 'Samuel Norse', 'Knows how to do IVs');
-INSERT INTO Nurses VALUES (12456, 'password', 'Amanda Kubrick', NULL);
-INSERT INTO Nurses VALUES (15233, 'password', 'Justin Gruber', NULL);
-INSERT INTO Nurses VALUES (87680, 'password', 'Caitlin Gomez', 'First year nurse');
-INSERT INTO Nurses VALUES (24933, 'password', 'Ellen Grant', 'Twenty years of experience');
+INSERT INTO Nurses VALUES (34534, 'password', 'Samuel Norse', 'sam@nurse.com', 'Knows how to do IVs');
+INSERT INTO Nurses VALUES (12456, 'password', 'Amanda Kubrick', 'amanda@nurse.com' , NULL);
+INSERT INTO Nurses VALUES (15233, 'password', 'Justin Gruber', 'justin@nurse.com', NULL);
+INSERT INTO Nurses VALUES (87680, 'password', 'Caitlin Gomez', 'caitlin@nurse.com', 'First year nurse');
+INSERT INTO Nurses VALUES (24933, 'password', 'Ellen Grant', 'ellen@nurse.com', 'Twenty years of experience');
 
 CREATE TABLE Patients (
 	PID INT NOT NULL UNIQUE,
@@ -97,17 +110,18 @@ CREATE TABLE Patients (
     FOREIGN KEY (Fam_Hist_ID) REFERENCES Family_history(Fam_Hist_ID) ON DELETE CASCADE,
 	FOREIGN KEY (NID) REFERENCES Nurses(NID) ON DELETE CASCADE
 );
-INSERT INTO Patients VALUES (123124, 'password', 'Hou',  'Hsiao-hsien', 2314, 1001, 301, 502, 34534);
-INSERT INTO Patients VALUES (125236, 'password', 'Chantal', 'Akerman', 8760, 1002, 301, 501, 87680);
-INSERT INTO Patients VALUES (234622, 'password', 'Lucretia', 'Martel', 4534, 1003, 303, 503, 12456);
-INSERT INTO Patients VALUES (558998, 'password', 'Jonathan', 'Glazer', 2603, 1004, 302, 502, 34534);
-INSERT INTO Patients VALUES (325543, 'password', 'Aleksei', 'German', 8799, 1005, 302, 503, 12456);
-INSERT INTO Patients VALUES (098664, 'password', 'Takeshi', 'Kitano', 9454, 1006, 303, 504, 24933);
+INSERT INTO Patients VALUES (198664, 'password', 'Takeshi', 'Kitano', 9454, 1001, 303, 504, 24933);
+INSERT INTO Patients VALUES (123124, 'password', 'Hou',  'Hsiao-hsien', 2314, 1002, 301, 502, 34534);
+INSERT INTO Patients VALUES (125236, 'password', 'Chantal', 'Akerman', 8760, 1003, 301, 501, 87680);
+INSERT INTO Patients VALUES (234622, 'password', 'Lucretia', 'Martel', 4534, 1004, 303, 503, 12456);
+INSERT INTO Patients VALUES (558998, 'password', 'Jonathan', 'Glazer', 2603, 1005, 302, 502, 34534);
+INSERT INTO Patients VALUES (325543, 'password', 'Aleksei', 'German', 8799, 1006, 302, 503, 12456);
 
 CREATE TABLE Doctor_patient (
 	PID INT NOT NULL,
     NPI BIGINT NOT NULL,
 	PRIMARY KEY (PID, NPI),
+	UNIQUE(PID, NPI),
     FOREIGN KEY (PID) REFERENCES Patients(PID) ON DELETE CASCADE,
     FOREIGN KEY (NPI) REFERENCES Doctors(NPI) ON DELETE CASCADE
 );
@@ -116,11 +130,11 @@ INSERT INTO Doctor_patient VALUES (125236, 1342523141);
 INSERT INTO Doctor_patient VALUES (234622, 3251567654);
 INSERT INTO Doctor_patient VALUES (558998, 3251567654);
 INSERT INTO Doctor_patient VALUES (325543, 1342523141);
-INSERT INTO Doctor_patient VALUES (098664, 3251567654);
+INSERT INTO Doctor_patient VALUES (198664, 3251567654);
 INSERT INTO Doctor_patient VALUES (123124, 5882941572);
 INSERT INTO Doctor_patient VALUES (125236, 2196832962);
 INSERT INTO Doctor_patient VALUES (325543, 6734223145);
-INSERT INTO Doctor_patient VALUES (098664, 6734223145);
+INSERT INTO Doctor_patient VALUES (198664, 6734223145);
 
 CREATE TABLE Prescriptions (
 	Prescript_ID INT NOT NULL AUTO_INCREMENT,
@@ -138,13 +152,24 @@ ALTER TABLE Prescriptions AUTO_INCREMENT=701;
 
 DROP TRIGGER IF EXISTS `duplicate_Script`;
 DELIMITER $$
-CREATE TRIGGER `duplicate_Script` BEFORE INSERT ON `prescriptions` FOR EACH ROW BEGIN
+CREATE TRIGGER `duplicate_Script` BEFORE INSERT ON `prescriptions` FOR EACH ROW 
+BEGIN
 	IF(EXISTS(SELECT 1 from Prescriptions WHERE
 		Prescript_Name = NEW.Prescript_Name AND
 		Dosage = NEW.Dosage AND
 		Prescribing_doc = NEW.Prescribing_doc AND
 		Patient = NEW.Patient)) THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Patient is already taking medication.';
+	END IF;
+END $$
+DELIMITER ;
+
+DROP TRIGGER IF EXISTS `out_of_date_Script`;
+DELIMITER $$
+CREATE TRIGGER `out_of_date_Script` BEFORE INSERT ON `prescriptions` FOR EACH ROW 
+BEGIN
+	IF(NEW.Expiration_date < Now()) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Prescription expiration date is in the past';
 	END IF;
 END $$
 DELIMITER ;
@@ -217,7 +242,7 @@ CREATE TABLE Actions (
 	Action_ID INT NOT NULL AUTO_INCREMENT,
 	User_Type ENUM('Admin','Patient','Nurse','Doctor') NOT NULL,
 	User_ID BIGINT NOT NULL,
-	Action_Type ENUM('Logged In', 'Logged Out', 'Created New Patient', 'Modified Record', 'Scheduled Appointment', 'Prescription Written') NOT NULL,
+	Action_Type ENUM('Logged In', 'Logged Out', 'Created New User', 'Modified Record', 'Scheduled Appointment', 'Prescription Written') NOT NULL,
 	Record_Modified_ID BIGINT NULL,
 	Action_Time DATETIME NOT NULL,
 	PRIMARY KEY (Action_ID)

@@ -9,9 +9,9 @@
 	<title>Medical Info</title>
 </head>
 <body>
-<link rel="stylesheet" type = "text/css" href="css/patient_info_style.css" />
+<link rel="stylesheet" type = "text/css" href="css/patient_portal_style.css" />
 <nav> 
-    <p>UH Medical Clinic<p>
+    <p>Logged in as <?php echo $_SESSION['Name'] ?><p>
         <ul>
                 <li><a href="patient_portal.php">Home</a></li>
                 <li><a href="patient_info.php">View Medical Information</a></li>
@@ -21,9 +21,6 @@
         </ul>
 </nav>
 <br>
-<div class="session">Logged in as <?php echo $_SESSION['Name'] ?></div>
-<br>
-
 <p><h2> Your current medical record: </h2></p><br><br>
 
 <?php

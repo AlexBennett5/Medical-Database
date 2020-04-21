@@ -10,21 +10,19 @@
 </head>
 <body>
 
-<link rel="stylesheet" type = "text/css" href="css/default.css" />
-<nav> 
-        <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
+<link rel="stylesheet" type = "text/css" href="css/doc_portal_style.css" />
+<nav>
+    <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
         <ul>
-            <li><a href="#">≡</a>
-                <ul>
-                    <li><a href="doc_portal.php">Home</a></li>
-                    <li><a href="doc_appointments.php">View Your Upcoming Appointments</a></li>
-                    <li><a href="doc_patients.php">Check your patients' files</a></li>
-                    <li><a href="doc_prescript.php">Write prescription</a></li>
-                    <li><a href="logout.php">Logout</a></li>
-                </ul>
-            </li>
+            <li><a href="doc_portal.php">Home</a></li>
+            <li><a href="doc_appointments.php">View Upcoming Appointments</a></li>
+            <li><a href="doc_patients.php">Check Your Patients Files</a></li>
+            <li><a href="doc_prescript.php">Write Prescription</a></li>
+            <li><a href="doc_reports.php">Demographic Reports </a></li>
+            <li><a href="logout.php">Logout</a></li>
         </ul>
 </nav>
+<br>
 
 <?php
 

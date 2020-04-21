@@ -10,23 +10,21 @@
 </head>
 <body>
 
-<link rel="stylesheet" type = "text/css" href="css/doc_prescript_style.css" />
-<body class="loggedin">
-    <nav class="navtop">
-        <div>
-            <h1>Logged in as <?php echo $_SESSION['Name'] ?></h1>
-            <a href="doc_portal.php">Home</a>
-            <a href="doc_appointments.php">View Upcoming Appointments</a>
-            <a href="doc_patients.php">Check Your Patients Files</a>
-            <a href="doc_prescript.php">Write Prescription</a>
-            <a href="logout.php">Logout</a>
-        </div>
-    </nav>
-<center><div class="content">
-			<h2>Add Prescription</h2>
-        </div></center>
-        <div class="box">
-			<h3><center>Please fill out the following fields:</center></h3>
+<link rel="stylesheet" type = "text/css" href="css/doc_portal_style.css" />
+<nav>
+    <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
+        <ul>
+            <li><a href="doc_portal.php">Home</a></li>
+            <li><a href="doc_appointments.php">View Upcoming Appointments</a></li>
+            <li><a href="doc_patients.php">Check Your Patients Files</a></li>
+            <li><a href="doc_prescript.php">Write Prescription</a></li>
+            <li><a href="doc_reports.php">Demographic Reports </a></li>
+            <li><a href="logout.php">Logout</a></li>
+        </ul>
+</nav>
+<br>
+<h2>Add Prescription</h2>
+<h3><center>Please fill out the following fields:</center></h3>
 		
 		
 		<center><form action = "doc_prescript_process.php" method = "POST">
@@ -44,10 +42,10 @@
 			<p>
 				Refill?
 				<br>
-				<label for="No"> No Refill </label>
-				<input type="radio" name="Refill" id="No" value="No"><br>
-				<label for="Yes"> Refill Permitted </label>
-				<input type="radio" name="Refill" id="Yes" value="Yes"><br>
+				<label for="N"> No Refill </label>
+				<input type="radio" name="Refill" id="N" value="N"><br>
+				<label for="Y"> Refill Permitted </label>
+				<input type="radio" name="Refill" id="Y" value="Y"><br>
 			</p>
 			<p>
 				<label for="PID">Patient ID:</label>

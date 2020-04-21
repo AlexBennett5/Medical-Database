@@ -10,21 +10,17 @@
 <nav> 
         <p>UH Medical Clinic</p>
         <ul>
-            <li><a href="#">≡</a>
-                <ul>
-                    <li><a href="homepage.php">Home</a></li>
-                    <li><a href="login_options.php">Login</a></li>
-                    <li><a href="about_us.php">About Us</a></li>
-                    <li><a href="contact_form_index.php">Contact Us</a></li>
-                </ul>
-            </li>
+                <li><a href="homepage.php">Home</a></li>
+                <li><a href="login_options.php">Login</a></li>
+                <li><a href="about_us.php">About Us</a></li>
+                <li><a href="contact_form_index.php">Contact Us</a></li>
         </ul>
 </nav>
-
+<br>
+<br>
 <div class="box">  
-    <h1> <center> Are you a Patient or Doctor? </center> </h1>
+    <h1> <center> Choose Your Login: </center> </h1>
     <br>
-    <h2> <center> Please Choose One: </center> </h2>
     
     <body>
         

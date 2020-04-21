@@ -3,21 +3,19 @@
 <head>
     <title> Nurse Login </title>
 </head>
-<link rel="stylesheet" type="text/css" href="css/default.css" />
+<link rel="stylesheet" type="text/css" href="css/nurse_login_style.css" />
 
 <nav> 
         <p>UH Medical Clinic</p>
         <ul>
-            <li><a href="#">≡</a>
-                <ul>
-                    <li><a href="homepage.php">Home</a></li>
-                    <li><a href="login_options.php">Login</a></li>
-                    <li><a href="about_us.php">About Us</a></li>
-                    <li><a href="contact_form_index.php">Contact Us</a></li>
-                </ul>
-            </li>
+
+                <li><a href="homepage.php">Home</a></li>
+                <li><a href="login_options.php">Login</a></li>
+                <li><a href="about_us.php">About Us</a></li>
+                <li><a href="contact_form_index.php">Contact Us</a></li>
         </ul>
 </nav>
+<br>
 
 
 <center><h2> Nurse Login </h2></center><br>

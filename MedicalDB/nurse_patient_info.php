@@ -6,45 +6,68 @@
 
 <html>
 <head>
-	<title>Medical Info</title>
+    <title>Medical Info</title>
 </head>
 <body>
-<link rel="stylesheet" type = "text/css" href="css/default.css" />
+<link rel="stylesheet" type = "text/css" href="css/nurse_portal_style.css" />
 <nav> 
         <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
         <ul>
-            <li><a href="#">≡</a>
-                <ul>
-                    <li><a href="nurse_portal.php">Home</a></li>
-                    <li><a href="nurse_patient_info.php">Search Patient Info</a></li>
-                    <li><a href="nurse_appointments_portal.php">Schedule an appointment</a></li>
-                    <li><a href="logout.php">Logout</a></li>
-                </ul>
-            </li>
+                <li><a href="nurse_portal.php">Home</a></li>
+                <li><a href="nurse_patient_info.php">Search Patient Info</a></li>
+                <li><a href="nurse_appointments_portal.php">Book Appointment</a></li>
+                <li><a href="logout.php">Logout</a></li>
         </ul>
 </nav>
+<br>
 
-<h2> Patient Record Search </h2><br>
+<h2> Search Patient Records </h2><br>
 
 <form action="" method="POST">
-<label for="search">Enter Patient PID: </label>
-<input type="text" minlength="6" maxlength="6" name="PID" required>
-<input type="submit" name="Submit">
+<label for="search">Patient PID: </label>
+<input type="text" minlength="6" maxlength="6" name="PID"><br>
+
+<label for="first_name">First Name: </label>
+<input type="text" maxlength=80 name="first_name"><br>
+
+<label for="last_name">Last Name: </label>
+<input type="text" maxlength=80 name="last_name"><br>
+
+<input type="submit" name="Search">
 </form><br><br>
 
 <?php
 
-    if(isset($_POST['Submit'])) {
+    if(isset($_POST['Search'])) {
 
-        $sql_pid = mysqli_query($conn, "SELECT * FROM Patients WHERE PID=".$_POST['PID'].";");
+        $query = "SELECT * FROM Patients WHERE ";
 
-        if (mysqli_num_rows($sql_pid) == 0) {
+        if(!empty($_POST['PID'])) {
+            $query .= "(PID=".$_POST['PID'].") AND";
+        }
 
-            echo "No results found for that PID";
+        if(!empty($_POST['first_name'])) {
+            $query .= "(First_Name='".$_POST['first_name']."') AND";
+        }
+
+        if(!empty($_POST['last_name'])) {
+            $query .= "(Last_Name='".$_POST['last_name']."') AND";
+        }
+
+        $query = substr($query, 0, -4);
+        $query .= ";";
+
+        $sql_pid = mysqli_query($conn, $query);
+
+        if (!$sql_pid || mysqli_num_rows($sql_pid) == 0) {
+
+            echo "No results found";
 
         } else {
 
-            gen_patient_info($_POST['PID']);
+            $pid = mysqli_fetch_assoc($sql_pid);
+
+            gen_patient_info($pid['PID']);
 
         }
 

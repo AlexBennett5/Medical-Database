@@ -6,28 +6,32 @@
 
 <html>
 <head>
-<title>Modify Nurse Record</title>
+<title>Record Deleted</title>
 </head>
 <body>
 
-<link rel="stylesheet" type = "text/css" href="css/admin_portal_style.css" />
+<link rel="stylesheet" type = "text/css" href="css/default.css" />
 <nav> 
         <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
         <ul>
+            <li><a href="#">≡</a>
+                <ul>
                     <li><a href="admin_mod_portal.php">Modify Records</a>
                     <li><a href="admin_search.php"> Search activity </a>
                     <li><a href="admin_report.php">View reports </a>
                     <li><a href="logout.php">Logout</a></li>
+                </ul>
+            </li>
         </ul>
 </nav>
-<br>
 
 <?php
 
-            mysqli_query($conn, "UPDATE Nurses SET Name='".$_POST['Name']."', Email='".$_POST['Email']."' Job_description='".$_POST['job_desc']."' WHERE NID=".$_POST['NID'].";") or die(mysqli_error($conn));
+    mysqli_query($conn, "DELETE FROM ".$_POST['table']." WHERE ".$_POST['ID_type']."=".$_POST['ID'].";") or die(mysqli_error($conn));
 
-            record_action("Admin", $_SESSION['User_ID'], "Modified Record", $_POST['NID']);
+    echo "Record deleted successfully!<br>";
 
-            echo "The record was successfully updated!<br><br>";
+    echo "<a href='admin_mod_portal.php'> Return to modification portal </a>";
+
 
 ?>

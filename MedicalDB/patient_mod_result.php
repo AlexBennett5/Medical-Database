@@ -9,7 +9,7 @@
     <title>Medical Info</title>
 </head>
 <body>
-<link rel="stylesheet" type = "text/css" href="css/patient_info_style.css" />
+<link rel="stylesheet" type = "text/css" href="css/patient_portal_style.css" />
 <nav> 
     <p>UH Medical Clinic<p>
         <ul>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 
-<link rel="stylesheet" type="text/css" href="css/patient_new_style.css"/>
+<link rel="stylesheet" type = "text/css" href="css/patient_portal_style.css" />
 
 
 <nav> 

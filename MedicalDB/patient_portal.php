@@ -11,7 +11,7 @@
 <body>
 <link rel="stylesheet" type = "text/css" href="css/patient_portal_style.css" />
 <nav>
-    <p>UH Medical Clinic<p>
+    <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
         <ul>
                 <li><a href="patient_portal.php">Home</a></li>
                 <li><a href="patient_info.php">View Medical Information</a></li>
@@ -21,9 +21,6 @@
         </ul>
 </nav>
 <br>
-<div class="session">Logged in as <?php echo $_SESSION['Name'] ?></div>
-<br>
-
 <center>You are currently logged in as <?php echo $_SESSION['Name'] ?><br>
 		Your PID is <?php echo $_SESSION['User_ID'] ?><br>
 		You are logged in as a <?php echo $_SESSION['User_Type'] ?><br>

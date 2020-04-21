@@ -11,7 +11,7 @@
 <nav>
         <p>UH Medical Clinic</p>
         <div class="logo">
-        <img src="logo.png" width="50" height="50">
+        <img src="css/logo.png" width="50" height="50">
         </div>
         <ul>
             <li><a href="homepage.php">Home</a></li>
@@ -22,13 +22,13 @@
     </nav>
     <div class="slideshow-container">
         <div class="mySlides fade">
-            <img src="slider1.jpeg" style= "width:100%">
+            <img src="css/slider1.jpeg" style= "width:100%">
         </div>
         <div class="mySlides fade">
-            <img src="slider2.jpeg" style= "width:100%">
+            <img src="css/slider2.jpeg" style= "width:100%">
         </div>
         <div class="mySlides fade">
-            <img src="slider3.jpeg" style= "width:100%">
+            <img src="css/slider3.jpeg" style= "width:100%">
         </div>
     <div style="text-align:center">
         <span class="dot"></span>

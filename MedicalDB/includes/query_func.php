@@ -144,7 +144,6 @@
 
         $sql_doc = mysqli_query($conn, "SELECT * FROM Doctors WHERE NPI IN (SELECT NPI FROM Doctor_patient WHERE PID='$PID') AND Specialist='Yes';") or die(mysqli_error($conn));
         $sql_gp = mysqli_query($conn, "SELECT * FROM Doctors WHERE NPI IN (SELECT NPI FROM Doctor_patient WHERE PID='$PID') AND Specialist='No';") or die(mysqli_error($conn));
-        $doc_gp = mysqli_fetch_assoc($sql_gp);
 
         $sql_nurse = mysqli_query($conn, "SELECT * FROM Nurses WHERE NID= '$data[NID]';");
         $nurse = mysqli_fetch_assoc($sql_nurse);
@@ -192,7 +191,13 @@
 
         echo "<tr><td>".$med['Past_prescriptions']."</td>";
         echo "<td>".$fam['Fam_History']."</td>";
-        echo "<td align='center'>".$doc_gp['Name']."</td>";
+        echo "<td align='center'>";
+        
+        while($docs_gp = mysqli_fetch_assoc($sql_gp)) {
+            echo $docs_gp['Name']."<br>";
+        }
+        echo "</td>";
+
         echo "<td align='center'>";
 
         while($docs = mysqli_fetch_assoc($sql_doc)) {
@@ -213,7 +218,7 @@
         $sql_pres = mysqli_query($conn, "SELECT * FROM Prescriptions WHERE Patient='$PID';");
 
         if (mysqli_num_rows($sql_pres)==0) {
-            echo "No prescriptions";
+            echo "No prescriptions<br>";
             return;
         }
 
@@ -261,6 +266,10 @@
             gen_patient_info($patient['PID']);
             echo "<br>";
             gen_prescriptions($patient['PID']);
+            echo "<br>";
+            echo "<form action='doc_patients_mod.php' method='POST'>";
+            echo "<input type='hidden' name='PID' value=".$patient['PID'].">";
+            echo "<input type='submit' value='Modify Patient Record'></form>";
             echo "<br> =================== <br>";
         }
 
@@ -303,7 +312,7 @@
         echo "<label for='DOB'> Date of Birth: </label>";
         echo "<input type='date' name='DOB' value=".$demo['Date_of_birth']."><br>";
 
-        echo "Ethnicity. Current value: ".$demo['Ethnicity']."<br>";
+        echo "Ethnicity. (Current value: ".$demo['Ethnicity'].")<br>";
         echo "<label for='Asian/Pacific Islander'>Asian/Pacific Islander</label>";
         echo "<input type='radio' name='ethnicity' value='Asian/Pacific Islander' required><br>";
         echo "<label for='African-American'>African-American</label>";
@@ -317,7 +326,7 @@
         echo "<label for='Other'>Other</label>";
         echo "<input type='radio' name='ethnicity' value='Other'><br><br>";
 
-        echo "Marital Status. Current value: ".$demo['Marital_status']."<br>";
+        echo "Marital Status. (Current value: ".$demo['Marital_status'].")<br>";
         echo "<label for='Single'>Single</label>";
         echo "<input type='radio' name='marital' value='Single' required><br>";
         echo "<label for='Married'>Married</label>";
@@ -373,11 +382,63 @@
         echo "<input type='hidden' name='NID' value=".$NID.">";
 
         echo "<label for='Name'> Name: </label>";
-        echo "<input type='text' name='Name' value='".$nurse['Name']."'><br>";
+        echo "<input type='text' name='Name' value='".$nurse['Name']."' required><br>";
+
+        echo "<label for='Email'> Email: </label>";
+        echo "<input type='text' name='Email' maxlength=80 value='".$nurse['Email']."' required><br>";
 
         echo "<label for='job_desc'>Job Description:</label>";
         echo "<textarea name='job_desc' maxlength='225' rows='4' cols='50'>".$nurse['Job_description']."</textarea><br><br>";
 
+
+    }
+
+    //Generates modify appointment record form (sans form heading w/ method/action)
+    function mod_apmt($ID) {
+
+        $conn = sql_connect();
+        $sql_apmt = mysqli_query($conn, "SELECT * FROM Appointments WHERE Appt_ID=".$ID.";");
+        $apmt = mysqli_fetch_assoc($sql_apmt);
+
+        $sql_patient = mysqli_query($conn, "SELECT * FROM Patients WHERE PID=".$apmt['Patient_ID'].";");
+        $patient = mysqli_fetch_assoc($sql_patient);
+
+        $sql_curr_doc = mysqli_query($conn, "SELECT * FROM Doctors WHERE NPI=".$apmt['Doctor_ID'].";");
+        $curr_doc = mysqli_fetch_assoc($sql_curr_doc);
+
+        echo "You are modifying the record of Appointment ID ".$ID."<br>";
+        echo "This appointment is scheduled for ".$patient['Last_Name'].", ".$patient['First_Name']." (".$patient['PID'].") <br>";
+        echo "This appointment is currently scheduled on ".$apmt['Appointment_time']." with ".$curr_doc['Name']."<br><br>";
+
+        echo "<input type='hidden' name='Appt_ID' value=".$ID.">";
+        echo "<input type='hidden' name='PID' value=".$patient['PID'].">";
+
+        echo "<label for='time'>Appointment Time</label>";
+        echo "<input type='datetime-local' step=1800 name='time' value=".$apmt['Appointment_time']."><br>";
+
+        echo "<label for='doc'>Doctor:</label>";
+        echo "<select id='doc' name='doc'>";
+        echo "<option value=''></option>";
+    
+        $sql_doc = mysqli_query($conn, "SELECT * FROM Doctors;");
+
+        while($doc = mysqli_fetch_assoc($sql_doc)) {
+            echo "<option value=".$doc['NPI'].">".$doc['Name']."</option>";
+        }
+
+        echo "</select><br>";
+
+        echo "<label for='clinic'>Location:</label>";
+        echo "<select id='clinic' name='clinic'>";
+        echo "<option value=''></option>";
+    
+        $sql_clinic = mysqli_query($conn, "SELECT * FROM Clinics;");
+
+        while($clinic = mysqli_fetch_assoc($sql_clinic)) {
+            echo "<option value=".$clinic['Clinic_ID'].">".$clinic['Clinic_name']."</option>";
+        }
+
+        echo "</select><br><br>";
 
     }
 
@@ -393,10 +454,10 @@
         echo "<input type='hidden' name='NPI' value=".$NPI.">";
 
         echo "<label for='Name'> Name: </label>";
-        echo "<input type='text' name='Name' value='".$doctor['Name']."'><br>";
+        echo "<input type='text' name='Name' value='".$doctor['Name']."' required><br>";
 
         echo "<label for='work_phone'>Work phone:</label>";
-        echo "<input type='tel' name='work_phone' pattern='\([0-9]{3}\) [0-9]{3}-[0-9]{4}' value='".$doctor['Work_phone']."'>";
+        echo "<input type='tel' name='work_phone' pattern='\([0-9]{3}\) [0-9]{3}-[0-9]{4}' value='".$doctor['Work_phone']."' required>";
         echo "<small> Format: (123) 345-1234</small><br>";
 
         echo "<label for='fax'>Fax:</label>";
@@ -404,7 +465,7 @@
         echo "<small> Format: (123) 345-1234</small><br>";
 
         echo "<label for='email'>Email address:</label>";
-        echo "<input type='text' maxlength=80 name='email' value=".$doctor['Email']."><br><br>";
+        echo "<input type='text' maxlength=80 name='email' value=".$doctor['Email']." required><br><br>";
 
         echo "Specialist? Current value: ".$doctor['Specialist']."<br>";
         echo "<label for='Yes'>Yes</label>";
@@ -413,7 +474,17 @@
         echo "<input type='radio' name='Specialist' value='No'><br>";
 
         echo "<label for='Specialization'> Specialization: </label>";
-        echo "<input type='text' name='Specialization' value='".$doctor['Specialization']."'><br>";
+        echo "<input type='text' name='Specialization' value='".$doctor['Specialization']."' required><br><br>";
+
+        echo "Which clinic(s) are they currently working out of?<br>";
+        
+        $sql_clinic = mysqli_query($conn, "SELECT DISTINCT * FROM Clinics;");
+        
+        while($clinic = mysqli_fetch_assoc($sql_clinic)) {    
+
+            echo "<label for=".$clinic['Clinic_ID'].">".$clinic['Clinic_name']."</label>";
+            echo "<input type='checkbox' name='Clinics[]' value=".$clinic['Clinic_ID']."><br>";
+        }
 
     }
 
@@ -426,7 +497,8 @@
         echo "<table><tr><th> PID </th>";
         echo "<th> Last Name </th>";
         echo "<th> First Name </th>";
-        echo "<th> Action </th></tr>";
+        echo "<th> Action </th>";
+        echo "<th></th></tr>";
 
         while($patient = mysqli_fetch_assoc($sql_patient)) {
 
@@ -435,7 +507,12 @@
             echo "<td> ".$patient['First_Name']." </td>";
             echo "<td><form action='admin_mod_patient_process.php' method='POST'>";
             echo "<input type='hidden' name='PID' value=".$patient['PID'].">";
-            echo "<input type='submit' name='Modify Record'></form></td></tr>";
+            echo "<input type='submit' value='Modify Record'></form></td>";
+            echo "<td><form action='admin_delete.php' method='POST'>";
+            echo "<input type='hidden' name='ID' value=".$patient['PID'].">";
+            echo "<input type='hidden' name='ID_type' value='PID'>";
+            echo "<input type='hidden' name='table' value='Patients'>";
+            echo "<input type='submit' value='Delete Record'></form></td></tr>";
 
         }
 
@@ -451,7 +528,8 @@
 
         echo "<table><tr><th> NID </th>";
         echo "<th> Name </th>";
-        echo "<th> Action </th></tr>";
+        echo "<th> Action </th>";
+        echo "<th></th></tr>";
 
         while($nurse = mysqli_fetch_assoc($sql_nurse)) {
 
@@ -459,7 +537,12 @@
             echo "<td> ".$nurse['Name']." </td>";
             echo "<td><form action='admin_mod_nurse_process.php' method='POST'>";
             echo "<input type='hidden' name='NID' value=".$nurse['NID'].">";
-            echo "<input type='submit' name='Modify Record'></form></td></tr>";
+            echo "<input type='submit' value='Modify Record'></form></td>";
+            echo "<td><form action='admin_delete.php' method='POST'>";
+            echo "<input type='hidden' name='ID' value=".$nurse['NID'].">";
+            echo "<input type='hidden' name='ID_type' value='NID'>";
+            echo "<input type='hidden' name='table' value='Nurses'>";
+            echo "<input type='submit' value='Delete Record'></form></td></tr>";
 
         }
 
@@ -475,7 +558,8 @@
 
         echo "<table><tr><th> NID </th>";
         echo "<th> Name </th>";
-        echo "<th> Action </th></tr>";
+        echo "<th> Action </th>";
+        echo "<th></th></tr>";
 
         while($doctor = mysqli_fetch_assoc($sql_doctor)) {
 
@@ -483,10 +567,306 @@
             echo "<td> ".$doctor['Name']." </td>";
             echo "<td><form action='admin_mod_doctor_process.php' method='POST'>";
             echo "<input type='hidden' name='NPI' value=".$doctor['NPI'].">";
-            echo "<input type='submit' name='Modify Record'></form></td></tr>";
+            echo "<input type='submit' value='Modify Record'></form></td>";
+            echo "<td><form action='admin_delete.php' method='POST'>";
+            echo "<input type='hidden' name='ID' value=".$doctor['NPI'].">";
+            echo "<input type='hidden' name='ID_type' value='NPI'>";
+            echo "<input type='hidden' name='table' value='Doctors'>";
+            echo "<input type='submit' value='Delete Record'></form></td></tr>";
         }
 
         echo "</table>";        
+
+    }
+
+    //Generates a button for a nurse to modify an appointment
+    function gen_mod_apmt($query) {
+
+        $conn = sql_connect();
+        $sql_apmt = mysqli_query($conn, $query) or die(mysqli_error($conn));
+
+        if(mysqli_num_rows($sql_apmt) == 0) {
+            echo "No appointments found";
+            return;
+        }
+
+        echo "<table><tr><th> Appointment ID </th><th> Doctor </th><th> Patient </th><th> Clinic </th><th> Appointment Time </th><th>Action</th><th></th></tr>";
+
+        while($apmt = mysqli_fetch_assoc($sql_apmt)) {
+            
+            $sql_patient = mysqli_query($conn, "SELECT * FROM Patients WHERE PID=".$apmt['Patient_ID'].";");
+            $patient = mysqli_fetch_assoc($sql_patient);
+
+            $sql_doc = mysqli_query($conn, "SELECT * FROM Doctors WHERE NPI=".$apmt['Doctor_ID'].";");
+            $doc = mysqli_fetch_assoc($sql_doc);
+
+            $sql_clinic = mysqli_query($conn, "SELECT * FROM Clinics WHERE Clinic_ID=".$apmt['Clinic_ID'].";");
+            $clinic = mysqli_fetch_assoc($sql_clinic);
+
+            echo "<tr><td>".$apmt['Appt_ID']."</td><td>".$doc['Name']." (".$doc['NPI'].")</td><td>".$patient['Last_Name'].", ".$patient['First_Name']." (".$patient['PID'].") </td><td>".$clinic['Clinic_name']."</td><td>".$apmt['Appointment_time']."</td>";
+
+            echo "<td><form action='nurse_edit_appointments.php' method='POST'><input type='hidden' name='Appt_ID' value=".$apmt['Appt_ID']."><input type='submit' value='Modify Appt'></form></td>";
+            echo "<td><form action='nurse_delete_appointments.php' method='POST'><input type='hidden' name='Appt_ID' value=".$apmt['Appt_ID']."><input type='submit' value='Delete Appt'></form></td></tr>";
+
+        }
+
+        echo "</table>";
+
+    }
+
+    // ~~~DEMOGRAPHIC REPORT LOGIC~~~
+
+    //Generates demographic report for specific doctor
+    function demo_report_doc($NPI) {
+
+        $conn = sql_connect();
+
+        $sql_pid = mysqli_query($conn, "SELECT * FROM Doctor_patient WHERE NPI=".$NPI.";") or die(mysqli_error($conn));
+
+        $sql_doc = mysqli_query($conn, "SELECT * FROM Doctors WHERE NPI=".$NPI.";") or die(mysqli_error($conn));
+        $doc = mysqli_fetch_assoc($sql_doc);
+
+        $insurance_Y = 0;
+        $insurance_N = 0;
+        $age = 0;
+        $sex_M = 0;
+        $sex_F = 0;
+        $sex_Other = 0;
+
+        $ethn_api = 0;
+        $ethn_afam = 0;
+        $ethn_natam = 0;
+        $ethn_white = 0;
+        $ethn_hisp = 0;
+        $ethn_other = 0;
+
+        $marital_sing = 0;
+        $marital_marr = 0;
+        $marital_widow = 0;
+        $marital_divor = 0;
+        $marital_separ = 0;
+
+        $total = 0;
+
+        if($sql_pid) {
+
+            while($pid = mysqli_fetch_assoc($sql_pid)) {
+
+                $total++;
+
+                $sql_patient = mysqli_query($conn, "SELECT * FROM Patients WHERE PID=".$pid['PID'].";") or die(mysqli_error($conn));
+                $patient = mysqli_fetch_assoc($sql_patient);
+
+                $sql_demo = mysqli_query($conn, "SELECT * FROM Demographics WHERE Demo_ID=".$patient['Demographics_ID'].";") or die(mysqli_error($conn));
+                $demo = mysqli_fetch_assoc($sql_demo);
+
+                if(strcmp($demo['Has_insurance'],'Yes') == 0) {
+                    $insurance_Y++;
+                } else {
+                    $insurance_N++;
+                }
+
+                $age += $demo['Age'];
+
+                if(strcmp($demo['Sex'],'M') == 0) {
+                    $sex_M++;
+                } elseif (strcmp($demo['Sex'],'F') == 0) {
+                    $sex_F++;
+                } else {
+                    $sex_Other++;
+                }
+
+                if (strcmp($demo['Ethnicity'], 'Asian/Pacific Islander') == 0) {
+                    $ethn_api++;
+                } elseif (strcmp($demo['Ethnicity'], 'African-American') == 0) {
+                    $ethn_afam++;
+                } elseif (strcmp($demo['Ethnicity'], 'Native American') == 0) {
+                    $ethn_natam++;
+                } elseif (strcmp($demo['Ethnicity'], 'White') == 0) {
+                    $ethn_white++;
+                } elseif (strcmp($demo['Ethnicity'], 'Hispanic') == 0) {
+                    $ethn_hisp++;
+                } else {
+                    $ethn_other++;
+                }
+
+                if(strcmp($demo['Marital_status'], 'Single') == 0) {
+                    $marital_sing++;
+                } elseif (strcmp($demo['Marital_status'], 'Married') == 0) {
+                    $marital_marr++;
+                } elseif (strcmp($demo['Marital_status'], 'Widowed') == 0) {
+                    $marital_widow++;
+                } elseif (strcmp($demo['Marital_status'], 'Divorced') == 0) {
+                    $marital_divor++;
+                } else {
+                    $marital_separ++;
+                }
+
+            }
+
+            if($total > 0) {
+                $insurance_Y = number_format($insurance_Y/(float)$total, 3);
+                $insurance_N = number_format($insurance_N/(float)$total, 3);
+                $sex_M = number_format($sex_M/(float)$total, 3);
+                $sex_F = number_format($sex_F/(float)$total, 3);
+                $sex_Other = number_format($sex_Other/(float)$total, 3);
+                $age = number_format($age/(float)$total, 1);
+                $marital_sing = number_format($marital_sing/(float)$total, 3);
+                $marital_marr = number_format($marital_marr/(float)$total, 3);
+                $marital_widow = number_format($marital_widow/(float)$total, 3);
+                $marital_divor = number_format($marital_divor/(float)$total, 3);
+                $marital_separ = number_format($marital_separ, 3);
+                $ethn_api = number_format($ethn_api/(float)$total, 3);
+                $ethn_afam = number_format($ethn_afam/(float)$total, 3);
+                $ethn_natam = number_format($ethn_natam/(float)$total, 3);
+                $ethn_white = number_format($ethn_white/(float)$total, 3);
+                $ethn_hisp = number_format($ethn_hisp/(float)$total, 3);
+                $ethn_other = number_format($ethn_other/(float)$total, 3);
+
+                echo "<h3> Patient Demographics for ".$doc['Name']."</h3><br>";
+                echo "<table><tr><th>[Has Insurance]</th><th></th><th>[Gender]</th><th></th><th></th></tr>";
+                echo "<tr><th>Yes</th><th>No</th><th>Male</th><th>Female</th><th>Other</th></tr>";
+                echo "<tr><td><center>".($insurance_Y*100)."%</center></td><td><center>".($insurance_N*100)."%</center></td><td><center>".($sex_M*100)."%</center></td><td><center>".($sex_F*100)."%</center></td><td><center>".($sex_Other*100)."%</center></td></tr>";
+                echo "<tr><th>[Average Age]</th><th></th><th></th><th>[Marital Status]</th><th></th><th></th><th></th></tr>";
+                echo "<tr><th></th><th>Single</th><th>Married</th><th>Widowed</th><th>Divorced</th><th>Separated</th></tr>";
+                echo "<tr><td><center>".$age."</center></td><td><center>".($marital_sing*100)."%</center></td><td><center>".($marital_marr*100)."%</center></td><td><center>".($marital_widow*100)."%</center></td><td><center>".($marital_divor*100)."%</center></td><td><center>".($marital_separ*100)."%</center></td></tr>";
+                echo "<tr><th></th><th></th><th>[Ethnicity]</th><th></th><th></th><th></th></tr>";
+                echo "<tr><th>Asian/Pacific Islander</th><th>Africa-American</th><th>Native American</th><th>White</th><th>Hispanic</th><th>Other</th></tr>";
+                echo "<tr><td><center>".($ethn_api*100)."%</center></td><td><center>".($ethn_afam*100)."%</center></td><td><center>".($ethn_natam*100)."%</center></td><td><center>".($ethn_white*100)."%</center></td><td><center>".($ethn_hisp*100)."%</center></td><td><center>".($ethn_other*100)."%</center></td></tr></table>";
+
+            } else {
+
+                echo "<h3> Patient Demographics for ".$doc['Name']."</h3><br>";
+                echo "No patients found for this doctor";
+
+            }
+            
+
+        } else {
+
+            echo "No patients found";
+
+        }
+
+    }
+
+    //Generates demographic report for entire clinic
+    function demo_report_all() {
+
+        $conn = sql_connect();
+
+        $sql_patient = mysqli_query($conn, "SELECT * FROM Patients;");
+
+        $insurance_Y = 0;
+        $insurance_N = 0;
+        $age = 0;
+        $sex_M = 0;
+        $sex_F = 0;
+        $sex_Other = 0;
+
+        $ethn_api = 0;
+        $ethn_afam = 0;
+        $ethn_natam = 0;
+        $ethn_white = 0;
+        $ethn_hisp = 0;
+        $ethn_other = 0;
+
+        $marital_sing = 0;
+        $marital_marr = 0;
+        $marital_widow = 0;
+        $marital_divor = 0;
+        $marital_separ = 0;
+
+        $total = 0;
+
+        if($sql_patient) {
+
+            while($patient = mysqli_fetch_assoc($sql_patient)) {
+
+                $total++;
+
+                $sql_demo = mysqli_query($conn, "SELECT * FROM Demographics WHERE Demo_ID=".$patient['Demographics_ID'].";") or die(mysqli_error($conn));
+                $demo = mysqli_fetch_assoc($sql_demo);
+
+                if(strcmp($demo['Has_insurance'],'Yes') == 0) {
+                    $insurance_Y++;
+                } else {
+                    $insurance_N++;
+                }
+
+                $age += $demo['Age'];
+
+                if(strcmp($demo['Sex'],'M') == 0) {
+                    $sex_M++;
+                } elseif (strcmp($demo['Sex'],'F') == 0) {
+                    $sex_F++;
+                } else {
+                    $sex_Other++;
+                }
+
+                if (strcmp($demo['Ethnicity'], 'Asian/Pacific Islander') == 0) {
+                    $ethn_api++;
+                } elseif (strcmp($demo['Ethnicity'], 'African-American') == 0) {
+                    $ethn_afam++;
+                } elseif (strcmp($demo['Ethnicity'], 'Native American') == 0) {
+                    $ethn_natam++;
+                } elseif (strcmp($demo['Ethnicity'], 'White') == 0) {
+                    $ethn_white++;
+                } elseif (strcmp($demo['Ethnicity'], 'Hispanic') == 0) {
+                    $ethn_hisp++;
+                } else {
+                    $ethn_other++;
+                }
+
+                if(strcmp($demo['Marital_status'], 'Single') == 0) {
+                    $marital_sing++;
+                } elseif (strcmp($demo['Marital_status'], 'Married') == 0) {
+                    $marital_marr++;
+                } elseif (strcmp($demo['Marital_status'], 'Widowed') == 0) {
+                    $marital_widow++;
+                } elseif (strcmp($demo['Marital_status'], 'Divorced') == 0) {
+                    $marital_divor++;
+                } else {
+                    $marital_separ++;
+                }
+
+            }
+
+            $insurance_Y = number_format($insurance_Y/(float)$total, 3);
+            $insurance_N = number_format($insurance_N/(float)$total, 3);
+            $sex_M = number_format($sex_M/(float)$total, 3);
+            $sex_F = number_format($sex_F/(float)$total, 3);
+            $sex_Other = number_format($sex_Other/(float)$total, 3);
+            $age = number_format($age/(float)$total, 1);
+            $marital_sing = number_format($marital_sing/(float)$total, 3);
+            $marital_marr = number_format($marital_marr/(float)$total, 3);
+            $marital_widow = number_format($marital_widow/(float)$total, 3);
+            $marital_divor = number_format($marital_divor/(float)$total, 3);
+            $marital_separ = number_format($marital_separ, 3);
+            $ethn_api = number_format($ethn_api/(float)$total, 3);
+            $ethn_afam = number_format($ethn_afam/(float)$total, 3);
+            $ethn_natam = number_format($ethn_natam/(float)$total, 3);
+            $ethn_white = number_format($ethn_white/(float)$total, 3);
+            $ethn_hisp = number_format($ethn_hisp/(float)$total, 3);
+            $ethn_other = number_format($ethn_other/(float)$total, 3);
+
+
+            echo "<h3> Patient Demographics for Entire Clinic</h3><br>";
+            echo "<table><tr><th>[Has Insurance]</th><th></th><th>[Gender]</th><th></th><th></th></tr>";
+            echo "<tr><th>Yes</th><th>No</th><th>Male</th><th>Female</th><th>Other</th></tr>";
+            echo "<tr><td><center>".($insurance_Y*100)."%</center></td><td><center>".($insurance_N*100)."%</center></td><td><center>".($sex_M*100)."%</center></td><td><center>".($sex_F*100)."%</center></td><td><center>".($sex_Other*100)."%</center></td></tr>";
+            echo "<tr><th>[Average Age]</th><th></th><th></th><th>[Marital Status]</th><th></th><th></th><th></th></tr>";
+            echo "<tr><th></th><th>Single</th><th>Married</th><th>Widowed</th><th>Divorced</th><th>Separated</th></tr>";
+            echo "<tr><td><center>".$age."</center></td><td><center>".($marital_sing*100)."%</center></td><td><center>".($marital_marr*100)."%</center></td><td><center>".($marital_widow*100)."%</center></td><td><center>".($marital_divor*100)."%</center></td><td><center>".($marital_separ*100)."%</center></td></tr>";
+            echo "<tr><th></th><th></th><th>[Ethnicity]</th><th></th><th></th><th></th></tr>";
+            echo "<tr><th>Asian/Pacific Islander</th><th>Africa-American</th><th>Native American</th><th>White</th><th>Hispanic</th><th>Other</th></tr>";
+            echo "<tr><td><center>".($ethn_api*100)."%</center></td><td><center>".($ethn_afam*100)."%</center></td><td><center>".($ethn_natam*100)."%</center></td><td><center>".($ethn_white*100)."%</center></td><td><center>".($ethn_hisp*100)."%</center></td><td><center>".($ethn_other*100)."%</center></td></tr></table>";
+
+        } else {
+
+            echo "No patients found";
+
+        }
 
     }
 
@@ -504,39 +884,126 @@
     }
 
     //Prints out list of user actions from datetime range low to high
-    function print_action($low, $high) {
+    function print_action($query) {
 
         $conn = sql_connect();
 
-        $date1 = new DateTime($low);
-        $date2 = new DateTime($high);
+        $res = mysqli_query($conn, $query) or die(mysqli_error($conn));
 
-        if ($low > $high) {
-            echo "Error: Your search interval was invalid <br>";
-            echo "<a href='admin_report.php>Return to the admin report page</a>";
-        } else {
+        echo "<table>";
+        echo "<tr><th> Action ID </th>";
+        echo "<th> User ID </th>";
+        echo "<th> User Type </th>";
+        echo "<th> Action Type </th>";
+        echo "<th> Record Modified </th>";
+        echo "<th> Action Time </th></tr>";
 
-            $res = mysqli_query($conn, "SELECT * FROM Actions WHERE Action_Time BETWEEN '".$low."' AND '".$high."';");
+        while($action = mysqli_fetch_assoc($res)) {
 
-            echo "<table>";
-            echo "<tr><th> Action ID </th>";
-            echo "<th> User ID </th>";
-            echo "<th> User Type </th>";
-            echo "<th> Action Type </th>";
-            echo "<th> Record Modified </th>";
-            echo "<th> Action Time </th></tr>";
+            echo "<tr><td>".$action['Action_ID']."</td>";
+            echo "<td>".$action['User_ID']."</td>";
+            echo "<td>".$action['User_Type']."</td>";
+            echo "<td>".$action['Action_Type']."</td>";
+            echo "<td>".$action['Record_Modified_ID']."</td>";
+            echo "<td>".$action['Action_Time']."</td></tr>";
 
-            while($action = mysqli_fetch_assoc($res)) {
+        }
+        echo "</table>";
+ 
+    }
 
-                echo "<tr><td>".$action['Action_ID']."</td>";
-                echo "<td>".$action['User_ID']."</td>";
-                echo "<td>".$action['User_Type']."</td>";
-                echo "<td>".$action['Action_Type']."</td>";
-                echo "<td>".$action['Record_Modified_ID']."</td>";
-                echo "<td>".$action['Action_Time']."</td></tr>";
+    //Calculates daily frequency of all action type for interval
+    function action_freq($low, $high, $action_type) {
 
+        $conn = sql_connect();
+
+        $query = "SELECT * FROM Actions WHERE (Action_Time BETWEEN '".$low."' AND '".$high."')";
+
+        if(!empty($action_type)) {
+            $query .= " AND (Action_Type='".$action_type."')";
+        }
+
+        $query .= ";";
+
+        $sql_res = mysqli_query($conn, $query);
+    
+        return mysqli_num_rows($sql_res);
+
+    }
+
+    //Calculates daily frequency of particular action type for interval
+    function action_freq_type($low, $high, $user_type, $action_type) {
+
+        $conn = sql_connect();
+
+        $query = "SELECT * FROM Actions WHERE (Action_Time BETWEEN '".$low."' AND '".$high."')";
+
+        if(!empty($user_type)) {
+            $query .= " AND (User_Type='".$user_type."')";
+        }
+
+        if(!empty($action_type)) {
+            $query .= " AND (Action_Type='".$action_type."')";
+        }
+
+        $query .= ";";
+
+        $sql_res = mysqli_query($conn, $query);
+
+        $total_freq = action_freq($low, $high, $action_type);
+
+        return mysqli_num_rows($sql_res)/(float)$total_freq;
+
+    }
+
+    //Generates frequency table per interval for user type
+    function gen_freq_table($low, $high, $user_type, $action_type) {
+
+        $conn = sql_connect();
+
+        $query = "SELECT User_ID FROM Actions WHERE (Action_Time BETWEEN '".$low."' AND '".$high."') AND (User_Type='".$user_type."')";
+
+        if(!empty($action_type)) {
+            $query .= " AND (Action_Type='".$action_type."')";
+        }
+
+        $query .= ";";
+
+        $sql_id = mysqli_query($conn, $query);
+
+        $table = "";
+        $cond = "";
+        $name = "";
+
+        if(strcmp($user_type, "Admin") == 0) {
+            $table = $user_type;
+            $cond = "Admin_ID";
+        } elseif (strcmp($user_type, "Patient") == 0) {
+            $table = $user_type."s";
+            $cond = "PID";
+        } elseif (strcmp($user_type, "Nurse") == 0) {
+            $table = $user_type."s";
+            $cond = "NID";
+        } elseif (strcmp($user_type, "Doctor") == 0) {
+            $table = $user_type."s";
+            $cond = "NPI";
+        }
+
+        while ($rows = mysqli_fetch_assoc($sql_id)) {
+
+            $sql_user = mysqli_query($conn, "SELECT * FROM ".$table." WHERE ".$cond."=".$rows['User_ID'].";");
+            $user_data = mysqli_fetch_assoc($sql_user);
+
+            if (strcmp($user_type, "Patient") == 0) {
+                $name = $user_data['First_Name']." ".$user_data['Last_Name'];
+            } else {
+                $name = $user_data['Name'];
             }
-            echo "</table>";
+
+            $sql_actions = mysqli_query($conn, "SELECT * FROM Actions WHERE User_ID=".$rows['User_ID'].";");
+            $num_act = mysqli_num_rows($sql_actions);
+
+            echo $name.": ".$num_act."<br>";
 
         }
 

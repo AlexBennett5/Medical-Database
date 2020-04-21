@@ -4,7 +4,7 @@
 	session_start();
 ?>
 
-<link rel="stylesheet" type="text/css" href="css/default.css" />
+<link rel="stylesheet" type = "text/css" href="css/patient_portal_style.css" />
 
 <html>
 <body>
@@ -61,7 +61,7 @@
 		    $_SESSION['User_Type'] = "Patient";
 		    $_SESSION['Has_GP'] = FALSE;
 
-		    record_action("Patient", $_SESSION['User_ID'], "Created New Patient", $_SESSION['User_ID']);
+		    record_action("Patient", $_SESSION['User_ID'], "Created New User", $_SESSION['User_ID']);
 		    record_action("Patient", $_SESSION['User_ID'], "Logged In", $_SESSION['User_ID']);
 
 			echo "<h2>Thank for joining UH Medical Clinic</h2>";
