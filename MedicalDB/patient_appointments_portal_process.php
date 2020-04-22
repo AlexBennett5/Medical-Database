@@ -24,6 +24,8 @@
 <br>
 <?php
 
+echo "<center>";
+
     if(isset($_POST['submit'])) {
 
         echo "<head><title>Appointment Scheduler</title></head>";
@@ -83,6 +85,7 @@
 ?>
 
 <br><br> <a href='patient_portal.php'>Return to patient portal</a>
+</center>
 
 </body>
 </html>

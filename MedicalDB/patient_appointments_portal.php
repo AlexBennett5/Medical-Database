@@ -22,6 +22,7 @@
 </nav>
 <br>
 <center>
+<h2>Book Appointment</h2><br>
 
 Do you want to schedule with a general practitioner or a specialist?<br><br>
 

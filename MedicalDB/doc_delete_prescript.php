@@ -6,10 +6,9 @@
 
 <html>
 <head>
-<title>Demographic Reports</title>
+<title>Prescriptions Deleted</title>
 </head>
 <body>
-
 <link rel="stylesheet" type = "text/css" href="css/doc_portal_style.css" />
 <nav>
     <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
@@ -24,47 +23,13 @@
 </nav>
 <br>
 <center>
-<h2>Demographic Report</h2><br>
-<form action='' method='POST'>
-<select name='compare'>
-<option value='' selected disabled></option>
-
 <?php
 
-$sql_doc = mysqli_query($conn, "SELECT * FROM Doctors;");
+    mysqli_query($conn, "DELETE FROM Prescriptions WHERE Prescript_ID=".$_POST['Prescript_ID'].";");
 
-while($doc = mysqli_fetch_assoc($sql_doc)) {
-
-    echo "<option value=".$doc['NPI'].">".$doc['Name']." (".$doc['Specialization'].") </option>";
-
-}
-
-echo "<option value=0> Entire Clinic </option>";
-echo "<input type='submit' value='Compare'>";
-echo "</form><br>";
-
-demo_report_doc($_SESSION['User_ID']);
-
-
-if (isset($_POST['compare'])) {
-
-    echo "<br> ============================ <br>";
-
-    if ($_POST['compare'] == 0) {
-        demo_report_all();
-    } else {
-
-        demo_report_doc($_POST['compare']);
-
-    }
-
-    echo "<br><br>";
-
-}
+    echo "Record deleted successfully!<br>";
 
 ?>
 </center>
 </body>
 </html>
-
-

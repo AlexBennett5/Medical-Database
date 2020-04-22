@@ -16,7 +16,7 @@
         <ul>
                 <li><a href="nurse_portal.php">Home</a></li>
                 <li><a href="nurse_patient_info.php">Search Patient Info</a></li>
-                <li><a href="nurse_appointments_portal.php">Schedule an appointment</a></li>
+                <li><a href="nurse_appointments_portal.php">Appointments Portal</a></li>
                 <li><a href="logout.php">Logout</a></li>
         </ul>
 </nav>

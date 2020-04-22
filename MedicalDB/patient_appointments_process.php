@@ -23,6 +23,8 @@
 <br>
 <?php
 
+echo "<center>";
+
 	if(isset($_POST['submit'])) {
 
 		$datetime = substr($_POST['Time'],0,10).' '.substr($_POST['Time'],11).':00';
@@ -50,7 +52,7 @@
 			echo "<form action='patient_portal.php'><button type='submit'>Return to patient portal</button></form>";
 
 		//Check to see if doctor practices at that clinic
-		} elseif (mysqli_num_rows($clinic_check) != 0) {
+		} elseif (mysqli_num_rows($clinic_check) == 0) {
 			echo "We're sorry, Dr. ".$doc['Name']." doesn't currently practice out of ".$clinic['Clinic_name']."<br>";
 			echo "Please <a href='patient_appointments_portal.php'>return to the appointment scheduler and pick another clinic</a><br><br>";
 			echo "<form action='patient_portal.php'><button type='submit'>Return to patient portal</button></form>";
@@ -67,6 +69,7 @@
 			    
 	}    
 	
+echo "</center>";
 
 
 ?>

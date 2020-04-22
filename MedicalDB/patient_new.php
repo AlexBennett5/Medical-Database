@@ -115,21 +115,21 @@ What is your blood type?<br>
 For the following fields, enter N/A if not applicable <br><br>
 
 <label for="allergies">Allergies:</label>
-<textarea name="allergies" maxlength="225" rows="4" cols="50" required></textarea><br><br>
+<textarea name="allergies" maxlength="225" rows="4" cols="50"></textarea><br><br>
 
 <label for="prev_cond">Previous Conditions:</label>
-<textarea name="prev_cond" maxlength="225" rows="4" cols="50" required></textarea><br><br>
+<textarea name="prev_cond" maxlength="225" rows="4" cols="50"></textarea><br><br>
 
 <label for="past_surg">Past Surgeries:</label>
-<textarea name="past_surg" maxlength="225" rows="4" cols="50" required></textarea><br><br>
+<textarea name="past_surg" maxlength="225" rows="4" cols="50"></textarea><br><br>
 
 <label for="past_prescript">Past Prescriptions:</label>
-<textarea name="past_prescript" maxlength="225" rows="4" cols="50" required></textarea><br><br>
+<textarea name="past_prescript" maxlength="225" rows="4" cols="50"></textarea><br><br>
 
 <label for="family_hist">Family History:</label>
-<textarea name="family_hist" maxlength="225" rows="4" cols="50" required></textarea><br><br>
+<textarea name="family_hist" maxlength="225" rows="4" cols="50"></textarea><br><br>
 
-<input type="submit" value="submit" name="submit">
+<input type="submit" value="Create Patient Profile"><br><br>
 
 </form>
 

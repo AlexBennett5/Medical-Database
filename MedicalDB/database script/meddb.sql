@@ -48,6 +48,17 @@ FOR EACH ROW BEGIN
 END $$
 DELIMITER ;
 
+DROP TRIGGER IF EXISTS `minor_patient`;
+DELIMITER $$
+CREATE TRIGGER `minor_patient` BEFORE INSERT ON `Demographics`
+FOR EACH ROW 
+BEGIN
+	IF NEW.age < 18 THEN
+	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='This patient is a minor and thus cannot set up an account';
+	END IF;
+END $$
+DELIMITER ;
+
 INSERT INTO Demographics VALUES (NULL, 'Yes', 75, '1945-01-01', 'M', 'Other', 'Widowed', '(713) 123-3645', '(713) 888-8888', NULL, 'takeshi@patient.com', 'Tree pollen');
 INSERT INTO Demographics VALUES (NULL, 'Yes', 28, '1992-01-01', 'M', 'Hispanic', 'Single', '(713) 123-1241', NULL, NULL, 'hou@patient.com', 'Peanuts');
 INSERT INTO Demographics VALUES (NULL, 'Yes', 31, '1989-01-01', 'F', 'White', 'Divorced', '(713) 123-5647', NULL, NULL, 'chantal@patient.com', NULL);
@@ -117,6 +128,21 @@ INSERT INTO Patients VALUES (234622, 'password', 'Lucretia', 'Martel', 4534, 100
 INSERT INTO Patients VALUES (558998, 'password', 'Jonathan', 'Glazer', 2603, 1005, 302, 502, 34534);
 INSERT INTO Patients VALUES (325543, 'password', 'Aleksei', 'German', 8799, 1006, 302, 503, 12456);
 
+DROP TRIGGER IF EXISTS `minor_patient`;
+DELIMITER $$
+CREATE TRIGGER `minor_patient` BEFORE INSERT ON `Patients`
+FOR EACH ROW 
+BEGIN
+	DECLARE test_age INT;
+
+	SELECT Age INTO test_age
+	FROM Demographics WHERE Demo_ID=(SELECT Demographics_ID FROM Patients WHERE PID=NEW.PID);
+	IF test_age < 18 THEN
+	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='This patient is a minor and thus cannot set up an account';
+	END IF;
+END $$
+DELIMITER ;
+
 CREATE TABLE Doctor_patient (
 	PID INT NOT NULL,
     NPI BIGINT NOT NULL,
@@ -156,8 +182,6 @@ CREATE TRIGGER `duplicate_Script` BEFORE INSERT ON `prescriptions` FOR EACH ROW
 BEGIN
 	IF(EXISTS(SELECT 1 from Prescriptions WHERE
 		Prescript_Name = NEW.Prescript_Name AND
-		Dosage = NEW.Dosage AND
-		Prescribing_doc = NEW.Prescribing_doc AND
 		Patient = NEW.Patient)) THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Patient is already taking medication.';
 	END IF;
@@ -229,6 +253,22 @@ CREATE TRIGGER `duplicateAppointment` BEFORE INSERT ON `appointments` FOR EACH R
 		Doctor_ID = NEW.Doctor_ID AND
 		Patient_ID = NEW.Patient_ID)) THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Appointment already exists on this data and time.';
+	END IF;
+END $$
+DELIMITER ;
+
+DROP TRIGGER IF EXISTS `no_insurance`;
+DELIMITER $$
+CREATE TRIGGER `no_insurance` BEFORE INSERT ON `appointments`
+FOR EACH ROW 
+BEGIN
+	DECLARE test ENUM('Yes','No');
+
+	SELECT Has_insurance INTO test
+	FROM Demographics WHERE Demo_ID=(SELECT Demographics_ID FROM Patients WHERE PID=NEW.Patient_ID);
+
+	IF test = 'No' THEN
+	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='This patient cannot schedule an appointment without insurance.';
 	END IF;
 END $$
 DELIMITER ;

@@ -9,20 +9,28 @@
 	<title>Modify Appointments</title>
 </head>
 <body>
-<link rel="stylesheet" type = "text/css" href="css/default.css" />
+<script>
+function confirm_delete() {
+    var x = confirm("Are you sure you want to delete this record?");
+
+    if (x)
+        return true;
+    else
+        return false;
+}
+</script>
+    
+<link rel="stylesheet" type = "text/css" href="css/nurse_portal_style.css" />
 <nav> 
         <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
         <ul>
-            <li><a href="#">≡</a>
-                <ul>
-                    <li><a href="nurse_portal.php">Home</a></li>
-                    <li><a href="nurse_patient_info.php">Search Patient Info</a></li>
-                    <li><a href="nurse_appointments_portal.php">Schedule an appointment</a></li>
-                    <li><a href="logout.php">Logout</a></li>
-                </ul>
-            </li>
+                <li><a href="nurse_portal.php">Home</a></li>
+                <li><a href="nurse_patient_info.php">Search Patient Info</a></li>
+                <li><a href="nurse_appointments_portal.php">Appointments Portal</a></li>
+                <li><a href="logout.php">Logout</a></li>
         </ul>
 </nav>
+<br>
 
 <center>Search for an appointment to modify:<br><br>
 
@@ -59,7 +67,7 @@ Which location?<br>
 ?>
 </select><br><br>
 
-<input type='submit' value='Search'><br><br></form></center>
+<input type='submit' value='Search'><br><br></form>
 
 <?php
 
@@ -103,5 +111,5 @@ Which location?<br>
 
 
 ?>
-
+</center>
 

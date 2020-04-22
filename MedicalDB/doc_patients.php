@@ -23,46 +23,79 @@
         </ul>
 </nav>
 <br>
+<center>
 <h2>Patient Records</h2>
 
-<center>
-Search for a patient<br><br>
+<h3>Search for a patient</h3><br>
 <form action='' method='POST'>
-<label for='PID'>Enter patient PID:</label>
+<label for='First_Name'>First Name:</label>
+<input type='text' name='First_Name'><br><br>
+<label for='Last_Name'>Last Name:</label>
+<input type='text' name='Last_Name'><br><br>
+<label for='PID'>PID:</label>
 <input type='text' minlength='6' maxlength ='6' name='PID'><br><br>
-<label for='search_some'>Search from PID</label>
-<input type='radio' id='search_pid' value=0 name='search'><br>
-<label for='search_all'>Display your current patients</label>
-<input type='radio' id='search_all' value=1 name='search'><br>
-<input type='submit' name='submit' value='Submit'>
-</form><br><br>
+<input type='submit' name='submit' value='Search'>
+</form><br>
 </center>
+
+<center>
+<form action='' method='POST'>
+<input type='submit' name='all_patient' value='Display Current Patients'>
+</form><br><br>
 
 <?php
 
+    if(isset($_POST['all_patient'])) {
+
+        gen_patient_info_doctor($_SESSION['User_ID']);
+
+    }
+
     if(isset($_POST['submit'])) {
 
-        $sql_pid = mysqli_query($conn, "SELECT * FROM Patients WHERE PID=".$_POST['PID'].";");
 
-        if ($sql_pid == FALSE && $_POST['search'] == 0) {
+        $query = "SELECT * FROM Patients ";
+
+        if (!empty($_POST['PID']) || !empty($_POST['First_Name']) || !empty($_POST['Last_Name'])) {
+
+            $query .= "WHERE ";
+
+            if(!empty($_POST['PID'])) {
+                $query .= "(PID=".$_POST['PID'].") AND ";
+            }
+
+            if(!empty($_POST['First_Name'])) {
+                $query .= "(First_Name='".$_POST['First_Name']."') AND ";
+            }
+
+            if(!empty($_POST['Last_Name'])) {
+                $query .= "(Last_Name='".$_POST['Last_Name']."') AND ";
+            }
+
+            $query = substr($query, 0, -4);
+            $query .= ";";
+
+        }
+
+        $sql_pid = mysqli_query($conn, $query);
+
+        if ($sql_pid == FALSE) {
 
             echo "No patient found";
 
         } else {
-            if ($_POST['search'] == 0) {
             
-                gen_patient_info($_POST['PID']);
+            while($patient = mysqli_fetch_assoc($sql_pid)) {
+
+                gen_patient_info($patient['PID']);
                 echo "<br>";
-                gen_prescriptions($_POST['PID']);
+                gen_prescriptions($patient['PID']);
                 echo "<br>";
                 echo "<form action='doc_patients_mod.php' method='POST'>";
                 echo "<input type='hidden' name='PID' value=".$_POST['PID'].">";
                 echo "<input type='submit' value='Modify Patient Record'></form>";
 
-            } else {
-
-                gen_patient_info_doctor($_SESSION['User_ID']);
-            }                
+            }             
 
         } 
 

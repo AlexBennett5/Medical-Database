@@ -21,7 +21,7 @@
         </ul>
 </nav>
 <br>
-<p><h2> Your current medical record: </h2></p><br><br>
+<p><center><h3> Your current medical record: </h3></p><br><br>
 
 <?php
     gen_patient_info($_SESSION['User_ID']);
@@ -31,5 +31,5 @@
 
 <form action="patient_mod.php" method="POST">
 <input type='submit' value='Modify Your Information'>
-</form>
+</form></center>
 

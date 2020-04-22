@@ -7,22 +7,21 @@
 <link rel="stylesheet" type = "text/css" href="css/patient_portal_style.css" />
 
 <html>
+<head>
+	<title> Patient Creation </title>
+</head>
 <body>
-
 <nav> 
-        <p>Welcome to UH Medical Clinic <?php echo $_SESSION['Name'] ?>!</p>
+        <p>UH Medical Clinic</p>
         <ul>
-            <li><a href="#">≡</a>
-                <ul>
-                    <li><a href="patient_portal.php">Home</a></li>
-                    <li><a href="patient_info.php">Check your Medical Information</a></li>
-                    <li><a href="patient_prescript.php">Check your Prescriptions</a></li>
-                    <li><a href="patient_appointments_portal.php">Schedule an appointment</a></li>
-                    <li><a href="logout.php">Logout</a></li>
-                </ul>
+                    <li><a href="homepage.php">Home</a></li>
+                    <li><a href="login_options.php">Login</a></li>
+                    <li><a href="about_us.php">About Us</a></li>
+                    <li><a href="contact_form_index.php">Contact Us</a></li>
             </li>
         </ul>
 </nav>
+<br>
 
 <?php
 

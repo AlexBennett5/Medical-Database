@@ -17,8 +17,8 @@
               <div class="topnav">
             <a href="homepage.php">Home</a>
             <a href="login_options.php">Login</a>
-            <a href="contact_form.php">Contact</a>
-            <a href="about_us.php">About</a>
+            <a href="contact_form.php">Contact Us</a>
+            <a href="about_us.php">About Us</a>
                 </div>
             
             <h1 id="heading">UH Medical Clinic</h1>

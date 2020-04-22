@@ -16,21 +16,23 @@
 <nav> 
         <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
         <ul>
-                    <li><a href="admin_mod_portal.php">Modify Records</a>
-                    <li><a href="admin_search.php"> Search activity </a>
-                    <li><a href="admin_report.php">View reports </a>
-                    <li><a href="logout.php">Logout</a></li>
+                    <li><a href="admin_portal.php">Home</a>
+                <li><a href="admin_mod_portal.php">Modify Records</a>
+                <li><a href="admin_search.php"> Search Activity </a>
+                <li><a href="admin_report.php">View Reports </a>
+                <li><a href="logout.php">Logout</a></li>
         </ul>
 </nav>
 <br>
 
-Enter parameters to analyze database info<br><br>
+<center><h3>Enter parameters to analyze database info</h3><br><br>
 
 <form method='POST'>
+Range of Site Activity<br>
 <input type='datetime-local' step=1800 name='low'><br>
 <input type='datetime-local' step=1800 name='high'><br><br>
 
-<label for='user_id'>Search by User ID </label>
+Search by User ID<br>
 <input type='text' name='user_id'> <br><br>
 
 Search by User Type<br>
@@ -55,15 +57,15 @@ Search by Action Type<br>
 <label for='Scheduled Appointment'>Scheduled Appointment</label>
 <input type='checkbox' name='action_type[]' value='Scheduled Appointment'><br>
 <label for='Prescription Written'>Prescription Written</label>
-<input type='checkbox' name='action_type[]' value='Prescription Written'><br>
+<input type='checkbox' name='action_type[]' value='Prescription Written'><br><br>
 
 
-<input type='submit' value='submit' name='Submit'>
-</form>
+<input type='submit' value='Search' name='Search'>
+</form></center><br>
 
 <?php
 	
- if(isset($_POST['Submit'])) {
+ if(isset($_POST['Search'])) {
 
  	$query = "SELECT * FROM Actions WHERE ";
 
@@ -116,7 +118,9 @@ Search by Action Type<br>
 
 	$query .= ";";
 
+	echo "<center>";
 	print_action($query);
+	echo "</center><br><br><br>";
  
  }
 

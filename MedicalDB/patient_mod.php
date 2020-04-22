@@ -21,6 +21,8 @@
         </ul>
 </nav>
 <br>
+<center>
 <form action='patient_mod_result.php' method='POST'>
 <?php mod_patient($_SESSION['User_ID']); ?>
-<input type='submit' value='submit'></form>
+<input type='submit' value='Update Information'></form><br><br>
+</center>

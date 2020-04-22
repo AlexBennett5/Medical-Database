@@ -16,14 +16,17 @@
         <ul>
                 <li><a href="nurse_portal.php">Home</a></li>
                 <li><a href="nurse_patient_info.php">Search Patient Info</a></li>
-                <li><a href="nurse_appointments_portal.php">Book Appointment</a></li>
+                <li><a href="nurse_appointments_portal.php">Appointments Portal</a></li>
                 <li><a href="logout.php">Logout</a></li>
         </ul>
 </nav>
 <br>
-
+<center>
+<h3>Create New Appointment</h3><br>
 
 <?php
+
+echo "Creating appointment for PID ".$_POST['PID']."<br><br>";
 
     if(isset($_POST['submit'])) {
 
@@ -104,6 +107,6 @@
 ?>
 
 <br><br> <a href='nurse_portal.php'>Return to nurse portal</a>
-
+</center>
 </body>
 </html>

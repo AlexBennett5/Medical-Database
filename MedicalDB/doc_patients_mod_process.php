@@ -51,7 +51,7 @@
             $sql_fam = mysqli_query($conn, "SELECT * FROM Family_history WHERE Fam_Hist_ID=".$patient['Fam_Hist_ID'].";") or die(mysqli_error($conn));
             $fam = mysqli_fetch_assoc($sql_fam);
 
-            mysqli_query($conn, "UPDATE Demographics SET Age=".$_POST['Age'].", Date_of_birth='".$_POST['DOB']."', Ethnicity='".$_POST['ethnicity']."', Marital_status='".$_POST['marital']."', Home_phone='".$_POST['home_phone']."', Cell_phone='".$_POST['cell_phone']."', Work_phone='".$_POST['work_phone']."', Allergies='".$_POST['allergies']."' WHERE Demo_ID=".$demo['Demo_ID'].";") or die(mysqli_error($conn));
+            mysqli_query($conn, "UPDATE Demographics SET Has_insurance='".$_POST['insurance']."', Age=".$_POST['Age'].", Date_of_birth='".$_POST['DOB']."', Ethnicity='".$_POST['ethnicity']."', Marital_status='".$_POST['marital']."', Home_phone='".$_POST['home_phone']."', Cell_phone='".$_POST['cell_phone']."', Work_phone='".$_POST['work_phone']."', Allergies='".$_POST['allergies']."' WHERE Demo_ID=".$demo['Demo_ID'].";") or die(mysqli_error($conn));
 
             mysqli_query($conn, "UPDATE Medical_history SET Prev_conditions='".$_POST['prev_cond']."', Past_surgeries='".$_POST['past_surg']."', Past_prescriptions='".$_POST['past_prescript']."' WHERE Med_Hist_ID=".$med['Med_Hist_ID'].";") or die(mysqli_error($conn));
 

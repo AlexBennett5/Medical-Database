@@ -14,14 +14,17 @@
 <nav> 
         <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
         <ul>
-                    <li><a href="admin_mod_portal.php">Modify Records</a>
-                    <li><a href="admin_search.php"> Search activity </a>
-                    <li><a href="admin_report.php">View reports </a>
-                    <li><a href="logout.php">Logout</a></li>
+
+                <li><a href="admin_portal.php">Home</a>
+                <li><a href="admin_mod_portal.php">Modify Records</a>
+                <li><a href="admin_search.php"> Search Activity </a>
+                <li><a href="admin_report.php">View Reports </a>
+                <li><a href="logout.php">Logout</a></li>
+
         </ul>
 </nav>
 <br>
-Which record type would you like to modify?<br><br>
+<center>Which record type would you like to modify?<br><br>
 
 <form action='' method='POST'>
 <label for="patient"> Patient: </label>
@@ -29,9 +32,9 @@ Which record type would you like to modify?<br><br>
 <label for="nurse"> Nurse: </label>
 <input type="radio" id="nurse" name="mod_type" value=1 required><br>
 <label for="doctor"> Doctor: </label>
-<input type="radio" id="doctor" name="mod_type" value=2 required><br>
-<input type='submit' name='submit' value='submit'>
-</form>
+<input type="radio" id="doctor" name="mod_type" value=2 required><br><br>
+<input type='submit' name='submit' value='Submit'>
+</form></center>
 
 <?php
 

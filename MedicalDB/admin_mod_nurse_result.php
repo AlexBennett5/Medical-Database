@@ -14,20 +14,20 @@
 <nav> 
         <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
         <ul>
-                    <li><a href="admin_mod_portal.php">Modify Records</a>
-                    <li><a href="admin_search.php"> Search activity </a>
-                    <li><a href="admin_report.php">View reports </a>
-                    <li><a href="logout.php">Logout</a></li>
+                <li><a href="admin_portal.php">Home</a>
+                <li><a href="admin_mod_portal.php">Modify Records</a>
+                <li><a href="admin_search.php"> Search Activity </a>
+                <li><a href="admin_report.php">View Reports </a>
+                <li><a href="logout.php">Logout</a></li>
         </ul>
 </nav>
 <br>
-
 <?php
 
-            mysqli_query($conn, "UPDATE Nurses SET Name='".$_POST['Name']."', Email='".$_POST['Email']."' Job_description='".$_POST['job_desc']."' WHERE NID=".$_POST['NID'].";") or die(mysqli_error($conn));
+            mysqli_query($conn, "UPDATE Nurses SET Name='".$_POST['Name']."', Job_description='".$_POST['job_desc']."' WHERE NID=".$_POST['NID'].";") or die(mysqli_error($conn));
 
             record_action("Admin", $_SESSION['User_ID'], "Modified Record", $_POST['NID']);
 
-            echo "The record was successfully updated!<br><br>";
+            echo "<center>The record was successfully updated!</center><br><br>";
 
 ?>

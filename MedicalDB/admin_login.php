@@ -23,7 +23,7 @@
 <input type="text" minlength="4" maxlength="4" name="Admin_ID" required><br>
 <label for="Password"> Enter your Password:</label>
 <input type="password" maxlength="80" name="password" required><br>
-<input type="submit" value="Submit"><br>
+<input type="submit" value="Login"><br>
 </form>
 </center>
 

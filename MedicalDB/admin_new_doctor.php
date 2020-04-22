@@ -10,29 +10,30 @@
 </head>
 <body>
 
-<link rel="stylesheet" type = "text/css" href="css/default.css" />
+<link rel="stylesheet" type = "text/css" href="css/admin_portal_style.css" />
 <nav> 
         <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
         <ul>
-                    <li><a href="admin_mod_portal.php">Modify Records</a>
-                    <li><a href="admin_search.php"> Search activity </a>
-                    <li><a href="admin_report.php">View reports </a>
-                    <li><a href="logout.php">Logout</a></li>
+                    <li><a href="admin_portal.php">Home</a>
+                <li><a href="admin_mod_portal.php">Modify Records</a>
+                <li><a href="admin_search.php"> Search Activity </a>
+                <li><a href="admin_report.php">View Reports </a>
+                <li><a href="logout.php">Logout</a></li>
         </ul>
 </nav>
 <br>
 
-Enter information to create new doctor profile:<br>
+<center>Enter information to create new doctor profile:<br><br>
 
 <form action='admin_new_doctor_process.php' method='POST'>
-<label for='NPI'>Enter NPI:</label>
+<label for='NPI'>NPI:</label>
 <input type='text' minlength=10 maxlength=10 name='NPI' required><br>
 <label for='Name'>Name:</label>
 <input type='text' name='Name' required><br>
-<label for='Password'>Password: </label>
-<input type='text' name='Password' minlength='5' maxlength='80' required><br>
 <label for='Email'>Email: </label>
 <input type='text' maxlength=80 name='Email' required><br>
+<label for='Password'>Password: </label>
+<input type='password' name='Password' minlength='5' maxlength='80' required><br><br>
 <label for='Work_phone'>Work Phone: </label>
 <input type="tel" name="Work_phone" pattern="\([0-9]{3}\) [0-9]{3}-[0-9]{4}" required>
 <small> Format: (123) 345-1234</small><br>
@@ -58,7 +59,7 @@ Clinics the doctor will work at:<br>
     while ($clinic = mysqli_fetch_assoc($sql_clinic)) {
 
         echo "<label for=".$clinic['Clinic_ID'].">".$clinic['Clinic_name']."</label>";
-        echo "<input type='checkbox' name='Clinics[]' value=".$clinic['Clinic_ID']."<br><br>";
+        echo "<input type='checkbox' name='Clinics[]' value=".$clinic['Clinic_ID']."><br>";
 
     }
 
@@ -67,4 +68,4 @@ Clinics the doctor will work at:<br>
 ?>
 
 <input type='submit' name='submit' value='Create New Doctor Profile'>
-
+</form>

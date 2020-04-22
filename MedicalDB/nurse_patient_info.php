@@ -15,12 +15,12 @@
         <ul>
                 <li><a href="nurse_portal.php">Home</a></li>
                 <li><a href="nurse_patient_info.php">Search Patient Info</a></li>
-                <li><a href="nurse_appointments_portal.php">Book Appointment</a></li>
+                <li><a href="nurse_appointments_portal.php">Appointments Portal</a></li>
                 <li><a href="logout.php">Logout</a></li>
         </ul>
 </nav>
 <br>
-
+<center>
 <h2> Search Patient Records </h2><br>
 
 <form action="" method="POST">
@@ -31,9 +31,9 @@
 <input type="text" maxlength=80 name="first_name"><br>
 
 <label for="last_name">Last Name: </label>
-<input type="text" maxlength=80 name="last_name"><br>
+<input type="text" maxlength=80 name="last_name"><br><br>
 
-<input type="submit" name="Search">
+<input type="submit" name="Search" value="Search">
 </form><br><br>
 
 <?php
@@ -74,4 +74,4 @@
     }
 
 ?>
-
+</center>

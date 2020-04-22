@@ -23,9 +23,9 @@
 <center><form action="nurse_login_process.php" method="POST">
 <label for="PID"> Enter your NID:</label>
 <input type="text" minlength="5" maxlength="5" name="NID" required><br>
-<label for="Password"> Enter your password:</label>
+<label for="Password"> Enter your Password:</label>
 <input type="password" maxlength="80" name="password" required><br>
-<input type="submit" value="Submit"><br>
+<input type="submit" value="Login"><br>
 </form>
 </center>
 

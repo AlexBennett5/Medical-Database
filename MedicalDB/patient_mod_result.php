@@ -11,7 +11,7 @@
 <body>
 <link rel="stylesheet" type = "text/css" href="css/patient_portal_style.css" />
 <nav> 
-    <p>UH Medical Clinic<p>
+    <p>Logged in as <?php echo $_SESSION['Name'] ?><p>
         <ul>
                 <li><a href="patient_portal.php">Home</a></li>
                 <li><a href="patient_info.php">View Medical Information</a></li>
@@ -21,10 +21,10 @@
         </ul>
 </nav>
 <br>
-<div class="session">Logged in as <?php echo $_SESSION['Name'] ?></div>
-<br>
 
 <?php
+
+    echo "<center>";
 
     mysqli_query($conn, "UPDATE Patients SET First_Name='".$_POST['First_Name']."', Last_Name='".$_POST['Last_Name']."', Last_4_SSN=".$_POST['SSN']." WHERE PID=".$_POST['PID'].";") or die(mysqli_error($conn));
 
@@ -39,7 +39,7 @@
     $sql_fam = mysqli_query($conn, "SELECT * FROM Family_history WHERE Fam_Hist_ID=".$patient['Fam_Hist_ID'].";") or die(mysqli_error($conn));
     $fam = mysqli_fetch_assoc($sql_fam);
 
-    mysqli_query($conn, "UPDATE Demographics SET Age=".$_POST['Age'].", Date_of_birth='".$_POST['DOB']."', Ethnicity='".$_POST['ethnicity']."', Marital_status='".$_POST['marital']."', Home_phone='".$_POST['home_phone']."', Cell_phone='".$_POST['cell_phone']."', Work_phone='".$_POST['work_phone']."', Allergies='".$_POST['allergies']."' WHERE Demo_ID=".$demo['Demo_ID'].";") or die(mysqli_error($conn));
+    mysqli_query($conn, "UPDATE Demographics SET Has_insurance='".$_POST['insurance']."', Age=".$_POST['Age'].", Date_of_birth='".$_POST['DOB']."', Ethnicity='".$_POST['ethnicity']."', Marital_status='".$_POST['marital']."', Home_phone='".$_POST['home_phone']."', Cell_phone='".$_POST['cell_phone']."', Work_phone='".$_POST['work_phone']."', Allergies='".$_POST['allergies']."' WHERE Demo_ID=".$demo['Demo_ID'].";") or die(mysqli_error($conn));
 
     mysqli_query($conn, "UPDATE Medical_history SET Prev_conditions='".$_POST['prev_cond']."', Past_surgeries='".$_POST['past_surg']."', Past_prescriptions='".$_POST['past_prescript']."' WHERE Med_Hist_ID=".$med['Med_Hist_ID'].";") or die(mysqli_error($conn));
 
@@ -49,5 +49,7 @@
 
     echo "The record was successfully updated!<br><br>";
     gen_patient_info($_POST['PID']);
+
+    echo "</center>";
 
 ?>

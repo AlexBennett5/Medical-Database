@@ -95,11 +95,23 @@
 
     }
 
-    function print_apmt_range($low, $high, $Doc_ID) {
+    function print_apmt_range($low, $high, $Doc_ID, $PID, $Clinic_ID) {
 
         $conn = sql_connect();
 
-        $sql_apmt = mysqli_query($conn, "SELECT * FROM Appointments WHERE Doctor_ID=".$Doc_ID." AND Appointment_time >= '".$low."' AND Appointment_time <= '".$high."';") or die(mysqli_error($conn));
+        $query = "SELECT * FROM Appointments WHERE (Doctor_ID=".$Doc_ID.") AND (Appointment_time >= '".$low."' AND Appointment_time <= '".$high."')";
+
+        if(!empty($PID)) {
+            $query .= " AND (Patient_ID=".$PID.")";
+        }
+
+        if(!empty($Clinic_ID)) {
+            $query .= " AND (Clinic_ID=".$Clinic_ID.")";
+        }
+
+        $query .= ";";
+
+        $sql_apmt = mysqli_query($conn, $query) or die(mysqli_error($conn));
 
         if (mysqli_num_rows($sql_apmt) == 0) {
 
@@ -159,7 +171,7 @@
         echo "<th>Marital Status</th></tr>";
 
         echo "<tr><td align='center'>".$data['First_Name']." ".$data['Last_Name']."</td>";
-        echo "<td align='center'>".$PID."</td>";
+        echo "<td align='center'>".$data['PID']."</td>";
         echo "<td align='center'>".$data['Last_4_SSN']."</td>";
         echo "<td align='center'>".$demo['Age']."</td>";
         echo "<td align='center'>".$demo['Date_of_birth']."</td>";
@@ -205,7 +217,12 @@
         }
         echo "</td>";
 
-        echo "<td align='center'>".$nurse['Name']."</td></tr>";
+        if(isset($nurse['Name'])) {
+            echo "<td align='center'>".$nurse['Name']."</td></tr>";
+        } else {
+            echo "<td align='center'></td></tr>";
+        }
+
         echo "</table>";
 
     }
@@ -310,7 +327,7 @@
         echo "<input type='number' min='0' max='120' name='Age' value=".$demo['Age']."><br>";
 
         echo "<label for='DOB'> Date of Birth: </label>";
-        echo "<input type='date' name='DOB' value=".$demo['Date_of_birth']."><br>";
+        echo "<input type='date' name='DOB' value=".$demo['Date_of_birth']."><br><br>";
 
         echo "Ethnicity. (Current value: ".$demo['Ethnicity'].")<br>";
         echo "<label for='Asian/Pacific Islander'>Asian/Pacific Islander</label>";
@@ -338,6 +355,12 @@
         echo "<label for='Separated'>Separated</label>";
         echo "<input type='radio' name='marital' value='Separated'><br><br>";
 
+        echo "Insurance Status. (Current value: ".$demo['Has_insurance'].")<br>";
+        echo "<label for='Yes'>Yes</label>";
+        echo "<input type='radio' name='insurance' value='Yes'><br>";
+        echo "<label for='No'>No</label>";
+        echo "<input type='radio' name='insurance' value='No'><br><br>";
+
         echo "<label for='home_phone'>Home phone:</label>";
         echo "<input type='tel' name='home_phone' pattern='\([0-9]{3}\) [0-9]{3}-[0-9]{4}' value='".$demo['Home_phone']."'>";
         echo "<small> Format: (123) 345-1234</small><br>";
@@ -353,19 +376,19 @@
         echo "<label for='email'>Email address:</label>";
         echo "<input type='text' maxlength=80 name='email' value=".$demo['Email']."><br><br>";        
 
-        echo "<label for='allergies'>Allergies:</label>";
+        echo "Allergies:<br>";
         echo "<textarea name='allergies' maxlength='225' rows='4' cols='50'>".$demo['Allergies']."</textarea><br><br>";
 
-        echo "<label for='prev_cond'>Previous Conditions:</label>";
+        echo "Previous Conditions:<br>";
         echo "<textarea name='prev_cond' maxlength='225' rows='4' cols='50'>".$med['Prev_conditions']."</textarea><br><br>";
 
-        echo "<label for='past_surg'>Past Surgeries:</label>";
+        echo "Past Surgeries:<br>";
         echo "<textarea name='past_surg' maxlength='225' rows='4' cols='50'>".$med['Past_surgeries']."</textarea><br><br>";
 
-        echo "<label for='past_prescript'>Previous Prescriptions:</label>";
+        echo "Previous Prescriptions:<br>";
         echo "<textarea name='past_prescript' maxlength='225' rows='4' cols='50'>".$med['Past_prescriptions']."</textarea><br><br>";
 
-        echo "<label for='family_hist'>Family History:</label>";
+        echo "Family History:<br>";
         echo "<textarea name='family_hist' maxlength='225' rows='4' cols='50'>".$fam['Fam_History']."</textarea><br><br>";
 
     }
@@ -385,12 +408,65 @@
         echo "<input type='text' name='Name' value='".$nurse['Name']."' required><br>";
 
         echo "<label for='Email'> Email: </label>";
-        echo "<input type='text' name='Email' maxlength=80 value='".$nurse['Email']."' required><br>";
+        echo "<input type='text' name='Email' maxlength=80 value='".$nurse['Email']."' required><br><br>";
 
-        echo "<label for='job_desc'>Job Description:</label>";
+        echo "Job Description:<br>";
         echo "<textarea name='job_desc' maxlength='225' rows='4' cols='50'>".$nurse['Job_description']."</textarea><br><br>";
 
 
+    }
+
+    //Generates modify prescription record form (sans form heading w/ method/action) for given ID
+    function mod_prescript($Pres_ID) {
+
+        $conn = sql_connect();
+        $sql_pres = mysqli_query($conn, "SELECT * FROM Prescriptions WHERE Prescript_ID=".$Pres_ID.";");
+        $pres = mysqli_fetch_assoc($sql_pres);
+
+        echo "You are modifying prescription ID ".$Pres_ID."<br><br>";
+        echo "This prescription is for PID: ".$pres['Patient']."<br>";
+
+        echo "<input type='hidden' name='Prescript_ID' value=".$Pres_ID.">";
+        echo "<input type='hidden' name='Patient' value=".$pres['Patient'].">";
+
+        echo "<label for='Prescript_Name'> Drug Name: </label>";
+        echo "<input type='text' name='Prescript_Name' value='".$pres['Prescript_Name']."' required><br>";
+
+        echo "<label for='Dosage'> Dosage: </label>";
+        echo "<input type='text' name='Dosage' value='".$pres['Dosage']."'required><br><br>";
+
+        echo "Refill allowed? (Current value: ".$pres['Refill']."<br>";
+        echo "<label for='Y'> Yes </label>";
+        echo "<input type='radio' name='Refill' value='Y' required><br>";
+        echo "<label for='N'> No </label>";
+        echo "<input type='radio' name='Refill' value='N'><br><br>";
+
+        echo "Expiration Date: <br>";
+        echo "<input type='datetime-local' step=1800 name='Expiration_date' value=".$pres['Expiration_date']."' required><br><br>";
+
+
+    }
+
+    //Form for a new prescription
+    function new_prescript() {
+
+        echo "<label for='Patient'> PID: </label>";
+        echo "<input type='text' name='Patient' required><br>";
+
+        echo "<label for='Prescript_Name'> Drug Name: </label>";
+        echo "<input type='text' name='Prescript_Name' required><br>";
+
+        echo "<label for='Dosage'> Dosage: </label>";
+        echo "<input type='text' name='Dosage' required><br><br>";
+
+        echo "Refill allowed?<br>";
+        echo "<label for='Y'> Yes </label>";
+        echo "<input type='radio' name='Refill' value='Y' required><br>";
+        echo "<label for='N'> No </label>";
+        echo "<input type='radio' name='Refill' value='N'><br><br>";
+
+        echo "Expiration Date: <br>";
+        echo "<input type='datetime-local' step=1800 name='Expiration_date'><br><br>";
     }
 
     //Generates modify appointment record form (sans form heading w/ method/action)
@@ -454,7 +530,7 @@
         echo "<input type='hidden' name='NPI' value=".$NPI.">";
 
         echo "<label for='Name'> Name: </label>";
-        echo "<input type='text' name='Name' value='".$doctor['Name']."' required><br>";
+        echo "<input type='text' name='Name' value='".$doctor['Name']."' required><br><br>";
 
         echo "<label for='work_phone'>Work phone:</label>";
         echo "<input type='tel' name='work_phone' pattern='\([0-9]{3}\) [0-9]{3}-[0-9]{4}' value='".$doctor['Work_phone']."' required>";
@@ -462,7 +538,7 @@
 
         echo "<label for='fax'>Fax:</label>";
         echo "<input type='tel' name='fax' pattern='\([0-9]{3}\) [0-9]{3}-[0-9]{4}' value='".$doctor['Fax']."'>";
-        echo "<small> Format: (123) 345-1234</small><br>";
+        echo "<small> Format: (123) 345-1234</small><br><br>";
 
         echo "<label for='email'>Email address:</label>";
         echo "<input type='text' maxlength=80 name='email' value=".$doctor['Email']." required><br><br>";
@@ -471,7 +547,7 @@
         echo "<label for='Yes'>Yes</label>";
         echo "<input type='radio' name='Specialist' value='Yes' required><br>";
         echo "<label for='No'>No</label>";
-        echo "<input type='radio' name='Specialist' value='No'><br>";
+        echo "<input type='radio' name='Specialist' value='No'><br><br>";
 
         echo "<label for='Specialization'> Specialization: </label>";
         echo "<input type='text' name='Specialization' value='".$doctor['Specialization']."' required><br><br>";
@@ -512,7 +588,7 @@
             echo "<input type='hidden' name='ID' value=".$patient['PID'].">";
             echo "<input type='hidden' name='ID_type' value='PID'>";
             echo "<input type='hidden' name='table' value='Patients'>";
-            echo "<input type='submit' value='Delete Record'></form></td></tr>";
+            echo "<input type='submit' value='Delete Record' onclick='confirm_delete()'></form></td></tr>";
 
         }
 
@@ -542,12 +618,32 @@
             echo "<input type='hidden' name='ID' value=".$nurse['NID'].">";
             echo "<input type='hidden' name='ID_type' value='NID'>";
             echo "<input type='hidden' name='table' value='Nurses'>";
-            echo "<input type='submit' value='Delete Record'></form></td></tr>";
+            echo "<input type='submit' value='Delete Record' onclick='confirm_delete()'></form></td></tr>";
 
         }
 
         echo "</table>";
 
+    }
+
+    //Generates list of current prescriptions for doctor NPI
+    function gen_mod_prescript_list($NPI) {
+        
+        $conn = sql_connect();
+        $sql_pres = mysqli_query($conn, "SELECT * FROM Prescriptions WHERE Prescribing_doc=".$NPI.";");
+
+        echo "<table><tr><th>Prescription ID</th><th>Drug Name</th><th>Refill?</th><th>Patient ID</th><th>Expiration Date</th><th>Action</th><th></th></tr>";
+
+        while ($pres = mysqli_fetch_assoc($sql_pres)) {
+
+            echo "<tr><td> ".$pres['Prescript_ID']."</td><td>".$pres['Prescript_Name']." </td><td>".$pres['Refill']."</td><td>".$pres['Patient']."</td><td>".$pres['Expiration_date']."</td>";
+
+            echo "<td><form action='doc_mod_prescript.php' method='POST'><input type='hidden' name='Prescript_ID' value=".$pres['Prescript_ID']."><input type='submit' value='Modify Script'></form></td>";
+            echo "<td><form action='doc_delete_prescript.php' method='POST'><input type='hidden' name='Prescript_ID' value=".$pres['Prescript_ID']."><input type='submit' value='Delete Script' onclick='confirm_delete()'></form></td></tr>";
+
+        }
+
+        echo "</table>";
     }
 
     //Generates list of doctor names to modify
@@ -572,7 +668,7 @@
             echo "<input type='hidden' name='ID' value=".$doctor['NPI'].">";
             echo "<input type='hidden' name='ID_type' value='NPI'>";
             echo "<input type='hidden' name='table' value='Doctors'>";
-            echo "<input type='submit' value='Delete Record'></form></td></tr>";
+            echo "<input type='submit' value='Delete Record' onclick='confirm_delete()'></form></td></tr>";
         }
 
         echo "</table>";        
@@ -606,7 +702,7 @@
             echo "<tr><td>".$apmt['Appt_ID']."</td><td>".$doc['Name']." (".$doc['NPI'].")</td><td>".$patient['Last_Name'].", ".$patient['First_Name']." (".$patient['PID'].") </td><td>".$clinic['Clinic_name']."</td><td>".$apmt['Appointment_time']."</td>";
 
             echo "<td><form action='nurse_edit_appointments.php' method='POST'><input type='hidden' name='Appt_ID' value=".$apmt['Appt_ID']."><input type='submit' value='Modify Appt'></form></td>";
-            echo "<td><form action='nurse_delete_appointments.php' method='POST'><input type='hidden' name='Appt_ID' value=".$apmt['Appt_ID']."><input type='submit' value='Delete Appt'></form></td></tr>";
+            echo "<td><form action='nurse_delete_appointments.php' method='POST'><input type='hidden' name='Appt_ID' value=".$apmt['Appt_ID']."><input type='submit' value='Delete Appt' onclick='confirm_delete()'></form></td></tr>";
 
         }
 
@@ -877,6 +973,7 @@
 
         $conn = sql_connect();
 
+        date_default_timezone_set('America/Chicago');
         $time = date("Y-m-d H:i:s");
 
         mysqli_query($conn, "INSERT INTO Actions VALUES(NULL,'".$User_Type."',".$User_ID.",'".$Action_Type."',".$Record_Modified.",'".$time."');") or die(mysqli_error($conn));
@@ -917,95 +1014,123 @@
 
         $conn = sql_connect();
 
-        $query = "SELECT * FROM Actions WHERE (Action_Time BETWEEN '".$low."' AND '".$high."')";
+        $query1 = "SELECT * FROM Actions WHERE (Action_Time BETWEEN '".$low."' AND '".$high."');";
+        $query2 = "SELECT * FROM Actions WHERE (Action_Time BETWEEN '".$low."' AND '".$high."') AND (Action_Type='".$action_type."');";
 
-        if(!empty($action_type)) {
-            $query .= " AND (Action_Type='".$action_type."')";
+        $sql_res1 = mysqli_query($conn, $query1);
+        $sql_res2 = mysqli_query($conn, $query2);
+
+        if (mysqli_num_rows($sql_res1) == 0) {
+            return 0;
         }
-
-        $query .= ";";
-
-        $sql_res = mysqli_query($conn, $query);
     
-        return mysqli_num_rows($sql_res);
+        return number_format(mysqli_num_rows($sql_res2)/(float)mysqli_num_rows($sql_res1), 2);
 
     }
 
-    //Calculates daily frequency of particular action type for interval
-    function action_freq_type($low, $high, $user_type, $action_type) {
+    //Calculates daily user type frequency for interval
+    function user_freq($low, $high, $user_type) {
 
         $conn = sql_connect();
 
-        $query = "SELECT * FROM Actions WHERE (Action_Time BETWEEN '".$low."' AND '".$high."')";
+        $query1 = "SELECT * FROM Actions WHERE (Action_Time BETWEEN '".$low."' AND '".$high."');";
+        $query2 = "SELECT * FROM Actions WHERE (Action_Time BETWEEN '".$low."' AND '".$high."') AND (User_Type='".$user_type."');";
 
-        if(!empty($user_type)) {
-            $query .= " AND (User_Type='".$user_type."')";
+        $sql_res1 = mysqli_query($conn, $query1);
+        $sql_res2 = mysqli_query($conn, $query2);
+
+        if (mysqli_num_rows($sql_res1) == 0) {
+            return 0;
         }
+    
+        return number_format(mysqli_num_rows($sql_res2)/(float)mysqli_num_rows($sql_res1), 2);
 
-        if(!empty($action_type)) {
-            $query .= " AND (Action_Type='".$action_type."')";
-        }
+    }
 
-        $query .= ";";
+    //Total num of actions per user type in interval
+    function total_action_user($low, $high, $user_type) {
 
+        $conn = sql_connect();
+
+        $query = "SELECT * FROM Actions WHERE (Action_Time BETWEEN '".$low."' AND '".$high."') AND (User_Type='".$user_type."');";
         $sql_res = mysqli_query($conn, $query);
 
-        $total_freq = action_freq($low, $high, $action_type);
-
-        return mysqli_num_rows($sql_res)/(float)$total_freq;
-
+        return mysqli_num_rows($sql_res);
     }
 
-    //Generates frequency table per interval for user type
-    function gen_freq_table($low, $high, $user_type, $action_type) {
+    //Total num of actions per action type in interval
+    function total_action_action($low, $high, $action_type) {
 
         $conn = sql_connect();
 
-        $query = "SELECT User_ID FROM Actions WHERE (Action_Time BETWEEN '".$low."' AND '".$high."') AND (User_Type='".$user_type."')";
+        $query = "SELECT * FROM Actions WHERE (Action_Time BETWEEN '".$low."' AND '".$high."') AND (Action_Type='".$action_type."');";
+        $sql_res = mysqli_query($conn, $query);
 
-        if(!empty($action_type)) {
-            $query .= " AND (Action_Type='".$action_type."')";
+        return mysqli_num_rows($sql_res);
+    }
+
+    //Generates action report for interval
+    function action_report($low, $high) {
+
+        $range_l = '';
+        $range_h = '';
+
+        if(strcmp($low, '1000-01-01 00:00:00') == 0) {
+            $range_l = "site's beginning";
+        } else {
+            $range_l = $low;
         }
 
-        $query .= ";";
-
-        $sql_id = mysqli_query($conn, $query);
-
-        $table = "";
-        $cond = "";
-        $name = "";
-
-        if(strcmp($user_type, "Admin") == 0) {
-            $table = $user_type;
-            $cond = "Admin_ID";
-        } elseif (strcmp($user_type, "Patient") == 0) {
-            $table = $user_type."s";
-            $cond = "PID";
-        } elseif (strcmp($user_type, "Nurse") == 0) {
-            $table = $user_type."s";
-            $cond = "NID";
-        } elseif (strcmp($user_type, "Doctor") == 0) {
-            $table = $user_type."s";
-            $cond = "NPI";
+        if(strcmp($high, '9999-12-31 23:59:59') == 0) {
+            $range_h = "now";
+        } else {
+            $range_h = $high;
         }
 
-        while ($rows = mysqli_fetch_assoc($sql_id)) {
+        $freq_patient = user_freq($low, $high, "Patient");
+        $freq_nurse = user_freq($low, $high, "Nurse");
+        $freq_doctor = user_freq($low, $high, "Doctor");
+        $freq_admin = user_freq($low, $high, "Admin");
 
-            $sql_user = mysqli_query($conn, "SELECT * FROM ".$table." WHERE ".$cond."=".$rows['User_ID'].";");
-            $user_data = mysqli_fetch_assoc($sql_user);
+        $total_patient = total_action_user($low, $high, "Patient");
+        $total_nurse = total_action_user($low, $high, "Nurse");
+        $total_doctor = total_action_user($low, $high, "Doctor");
+        $total_admin = total_action_user($low, $high, "Admin");
 
-            if (strcmp($user_type, "Patient") == 0) {
-                $name = $user_data['First_Name']." ".$user_data['Last_Name'];
-            } else {
-                $name = $user_data['Name'];
-            }
+        $freq_login = action_freq($low, $high, "Logged In");
+        $freq_logout = action_freq($low, $high, "Logged Out");
+        $freq_newuser = action_freq($low, $high, "Created New User");
+        $freq_modrec = action_freq($low, $high, "Modified Record");
+        $freq_apmt = action_freq($low, $high, "Scheduled Appointment");
+        $freq_prescript = action_freq($low, $high, "Prescription Written");
 
-            $sql_actions = mysqli_query($conn, "SELECT * FROM Actions WHERE User_ID=".$rows['User_ID'].";");
-            $num_act = mysqli_num_rows($sql_actions);
+        $total_login = total_action_action($low, $high, "Logged In");
+        $total_logout = total_action_action($low, $high, "Logged Out");
+        $total_newuser = total_action_action($low, $high, "Created New User");
+        $total_modrec = total_action_action($low, $high, "Modified Record");
+        $total_apmt = total_action_action($low, $high, "Scheduled Appointment");
+        $total_prescript = total_action_action($low, $high, "Prescription Written");
 
-            echo $name.": ".$num_act."<br>";
+        echo "<h2>Activity report for interval from ".$range_l." to ".$range_h."</h2><br>";
+        
+        echo "<h3>Averade Daily Actions per User Type</h3>";
+        echo "<table><tr><th>Patients</th><th>Nurses</th><th>Doctors</th><th>Admin</th></tr>";
+        echo "<tr><td><center>".$freq_patient."</center></td><td><center>".$freq_nurse."</center></td><td><center>".$freq_doctor."</center></td><td><center>".$freq_admin."</center></td></tr></table>";
 
-        }
+        echo "<h3>Total number of Actions per User Type</h3>";
+        echo "<table><tr><th>Patients</th><th>Nurses</th><th>Doctors</th><th>Admin</th></tr>";
+        echo "<tr><td><center>".$total_patient."</center></td><td><center>".$total_nurse."</center></td><td><center>".$total_doctor."</center></td><td><center>".$total_admin."</center></td></tr></table>";
+
+        echo "<h3>Average Daily Actions per Action Type</h3>";
+        echo "<table><tr><td>Logins: ".$freq_login." </td><td>Logouts: ".$freq_logout." </td></tr>";
+        echo "<tr><td>New Users Created: ".$freq_newuser." </td><td>Records Modified: ".$freq_modrec." </td></tr>";
+        echo "<tr><td>Appointments Scheduled: ".$freq_apmt."</td><td>Prescriptions Written: ".$freq_prescript."</td></tr></table>";
+
+        echo "<h3>Total number of Actions per Action Type</h3>";
+        echo "<table><tr><td>Logins: ".$total_login." </td><td>Logouts: ".$total_logout." </td></tr>";
+        echo "<tr><td>New Users Created: ".$total_newuser." </td><td>Records Modified: ".$total_modrec." </td></tr>";
+        echo "<tr><td>Appointments Scheduled: ".$total_apmt."</td><td>Prescriptions Written: ".$total_prescript."</td></tr></table>";
+
 
     }
 

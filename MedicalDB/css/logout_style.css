@@ -1,5 +1,7 @@
 body{
-    background-color: lightgray;
+    background-image: url("homepage.jpeg");
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 *{
     font-family: "Times New Roman";
@@ -42,4 +44,45 @@ nav ul li a{
     font-size: 15px;
     padding: 22px 14px;
     text-decoration: none;
+}
+
+.slideshow-container{
+    width: 800px;
+    height: 500px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+}
+/*bullet indicators*/
+.dot{
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6 ease;
+}
+.active{
+    background-color: #717171;
+}
+/*fading animation*/
+.fade{
+    -webkit-animation-name: fade;
+    -webkit-animation-duration: 1.5s;
+    animation-name: fade;
+    animation-duration: 1.5s;
+}
+@-webkit-keyframes fade{
+    from{opacity: .4}
+    to{opacity: 1}
+}
+@keyframes fade{
+    from{opacity: .4}
+    to{opacity: 1}
+}
+p{
+    font-size: 20px;
 }

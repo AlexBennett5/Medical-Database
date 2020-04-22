@@ -6,9 +6,19 @@
 
 <html>
 <head>
-<title>Add Patient Prescription</title>
+<title>Prescriptions Portal</title>
 </head>
 <body>
+<script>
+function confirm_delete() {
+    var x = confirm("Are you sure you want to delete this record?");
+
+    if (x)
+        return true;
+    else
+        return false;
+}
+</script>
 
 <link rel="stylesheet" type = "text/css" href="css/doc_portal_style.css" />
 <nav>
@@ -23,44 +33,21 @@
         </ul>
 </nav>
 <br>
-<h2>Add Prescription</h2>
-<h3><center>Please fill out the following fields:</center></h3>
-		
-		
-		<center><form action = "doc_prescript_process.php" method = "POST">
-			
-			<p>
-				<label for="Prescript_Name">Prescription Name:</label>
-				<br>
-				<input type="text" maxlength='100' name="Prescript_Name" id="Prescript_name" required><br>
-			</p>
-			<p>
-				<label for="Dosage">Dosage:</label>
-				<br>
-				<input type="text" maxlength='225' name="Dosage" id="Dosage" required><br>
-			</p>
-			<p>
-				Refill?
-				<br>
-				<label for="N"> No Refill </label>
-				<input type="radio" name="Refill" id="N" value="N"><br>
-				<label for="Y"> Refill Permitted </label>
-				<input type="radio" name="Refill" id="Y" value="Y"><br>
-			</p>
-			<p>
-				<label for="PID">Patient ID:</label>
-				<br>
-				<input type="text" minlength='6' maxlength='6' name="PID" id="PID" required><br>
-			</p>
-			<p>
-				<label for="Expiration">Expiration Date:</label>
-				<br>
-				<input type='datetime-local' step=1800 value='2020-01-01T08:00' name='Expiration' required><br>
-			</p>
+<center>
+<h2>Prescriptions Portal</h2>
 
-				<input type="submit" value="Submit">
-        
-		</form></center>
-        </div>
-	</body>
-</html>
+Enter Prescription ID of the record you want to edit:<br><br>
+
+<form action='doc_mod_prescript.php' method="POST">
+<input type="text" name="Prescript_ID">
+<input type="submit" value="search">
+</form><br><br>
+
+<?php gen_mod_prescript_list($_SESSION['User_ID']) ?><br>
+
+<form action='doc_new_prescript.php' method='POST'>
+<input type='submit' value='Write New Prescription'>
+</form><br>
+
+
+</center>

@@ -14,14 +14,14 @@
 <nav> 
         <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
         <ul>
-                    <li><a href="admin_mod_portal.php">Modify Records</a>
-                    <li><a href="admin_search.php"> Search activity </a>
-                    <li><a href="admin_report.php">View reports </a>
-                    <li><a href="logout.php">Logout</a></li>
+                <li><a href="admin_portal.php">Home</a>
+                <li><a href="admin_mod_portal.php">Modify Records</a>
+                <li><a href="admin_search.php"> Search Activity </a>
+                <li><a href="admin_report.php">View Reports </a>
+                <li><a href="logout.php">Logout</a></li>
         </ul>
 </nav>
 <br>
-
-<form action='admin_mod_nurse_result.php' method='POST'>
-<?php mod_nurse($_POST['NID']); ?>
-<input type='submit' value='submit'></form>
+<center><form action='admin_mod_nurse_result.php' method='POST'>
+<?php mod_nurse($_POST['NID']); ?><br>
+<input type='submit' value='Save changes'></form></center>

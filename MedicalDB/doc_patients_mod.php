@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<link rel="stylesheet" type = "text/css" href="css/doc_patients_style.css" />
+<link rel="stylesheet" type = "text/css" href="css/doc_portal_style.css" />
 <body class="loggedin">
     <nav class="navtop">
         <div>

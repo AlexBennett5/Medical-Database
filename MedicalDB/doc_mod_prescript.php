@@ -6,7 +6,7 @@
 
 <html>
 <head>
-<title>Demographic Reports</title>
+<title>Modify Prescription</title>
 </head>
 <body>
 
@@ -24,47 +24,19 @@
 </nav>
 <br>
 <center>
-<h2>Demographic Report</h2><br>
-<form action='' method='POST'>
-<select name='compare'>
-<option value='' selected disabled></option>
-
 <?php
 
-$sql_doc = mysqli_query($conn, "SELECT * FROM Doctors;");
+    $sql_test = mysqli_query($conn, "SELECT * FROM Prescriptions WHERE Prescript_ID=".$_POST['Prescript_ID']." AND Prescribing_doc=".$_SESSION['User_ID'].";");
 
-while($doc = mysqli_fetch_assoc($sql_doc)) {
-
-    echo "<option value=".$doc['NPI'].">".$doc['Name']." (".$doc['Specialization'].") </option>";
-
-}
-
-echo "<option value=0> Entire Clinic </option>";
-echo "<input type='submit' value='Compare'>";
-echo "</form><br>";
-
-demo_report_doc($_SESSION['User_ID']);
-
-
-if (isset($_POST['compare'])) {
-
-    echo "<br> ============================ <br>";
-
-    if ($_POST['compare'] == 0) {
-        demo_report_all();
+    if(mysqli_num_rows($sql_test) == 0) {
+        echo "You are not the prescribing doctor for the prescription. You cannot edit other doctor's prescriptions";
     } else {
-
-        demo_report_doc($_POST['compare']);
-
+        echo "<form action='doc_mod_prescript_result.php' method='POST'>";
+        mod_prescript($_POST['Prescript_ID']);
+        echo "<input type='submit' value='Save changes'></form>";
     }
-
-    echo "<br><br>";
-
-}
 
 ?>
 </center>
 </body>
 </html>
-
-

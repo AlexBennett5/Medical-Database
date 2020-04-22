@@ -14,14 +14,16 @@
 <nav> 
         <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
         <ul>
-                    <li><a href="admin_mod_portal.php">Modify Records</a>
-                    <li><a href="admin_search.php"> Search activity </a>
-                    <li><a href="admin_report.php">View reports </a>
-                    <li><a href="logout.php">Logout</a></li>
+
+                <li><a href="admin_portal.php">Home</a>
+                <li><a href="admin_mod_portal.php">Modify Records</a>
+                <li><a href="admin_search.php"> Search Activity </a>
+                <li><a href="admin_report.php">View Reports </a>
+                <li><a href="logout.php">Logout</a></li>
+
         </ul>
 </nav>
 <br>
-
 <?php
 
         mysqli_query($conn, "UPDATE Doctors SET Name='".$_POST['Name']."', Work_phone='".$_POST['work_phone']."', Fax='".$_POST['fax']."', Email='".$_POST['email']."', Specialist='".$_POST['Specialist']."', Specialization='".$_POST['Specialization']."' WHERE NPI=".$_POST['NPI'].";") or die(mysqli_error($conn));
@@ -37,6 +39,6 @@
 
         record_action("Admin", $_SESSION['User_ID'], "Modified Record", $_POST['NPI']);
 
-        echo "The record was successfully updated!<br><br>";
+        echo "<center>The record was successfully updated!<br><br></center>";
 
 ?>

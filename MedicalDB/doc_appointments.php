@@ -22,19 +22,32 @@
         </ul>
 </nav>
 <br>
-    <h2>View Upcoming Appointments</h2>
-
 <center>
+    <h2>View Upcoming Appointments</h2><br>
+
+
 Check your upcoming appointments for the following range:<br><br>
 <form action='' method='POST'>
 <label for='low'>From:</label>
-<input type='datetime-local' step=1800 value='2020-01-01T08:00' name='low'><br>
+<input type='datetime-local' step=1800 name='low'><br>
 <label for='high'>To:</label>
-<input type='datetime-local' step=1800 value='2020-01-01T08:00' name='high'><br>
-<label for='search_some'>Search Range</label>
-<input type='radio' id='search_some' value=0 name='search'><br>
-<label for='search_all'>Display all Appointments</label>
-<input type='radio' id='search_all' value=1 name='search'><br>
+<input type='datetime-local' step=1800 name='high'><br><br>
+<label for='PID'>PID: </label>
+<input type='text' name='PID'><br><br>
+
+<label for='clinic'>Location</label>
+<select name='clinic'>
+<option value='' selected disable></option>
+<?php
+    $sql_clinic = mysqli_query($conn, "SELECT * FROM Clinics;");
+
+    while ($clinic = mysqli_fetch_assoc($sql_clinic)) {
+        echo "<option value=".$clinic['Clinic_ID'].">".$clinic['Clinic_name']."</option>";
+    }
+
+?>
+</select><br><br>
+
 <input type='submit' name='submit' value='Submit'>
 </form><br><br>
 </center>
@@ -44,24 +57,33 @@ Check your upcoming appointments for the following range:<br><br>
 
     if(isset($_POST['submit'])) {
 
-        $dt_low = substr($_POST['low'],0,10).' '.substr($_POST['low'],11).':00';
-        $dt_high = substr($_POST['high'],0,10).' '.substr($_POST['high'],11).':00';
-        $low = new DateTime($dt_low);
-        $high = new DateTime($dt_high);
+
+        if(!empty($_POST['low']) && !empty($_POST['high'])) {
+            $low = substr($_POST['low'],0,10).' '.substr($_POST['low'],11).':00';
+            $high = substr($_POST['high'],0,10).' '.substr($_POST['high'],11).':00';
+        } elseif (!empty($_POST['low']) && empty($_POST['high'])) {
+            $low = substr($_POST['low'],0,10).' '.substr($_POST['low'],11).':00';
+            $high = "9999-12-31 23:59:59";
+        } elseif (empty($_POST['low']) && !empty($_POST['high'])) {
+            $low = "1000-01-01 00:00:00";
+            $high = substr($_POST['high'],0,10).' '.substr($_POST['high'],11).':00';
+        } else {
+            $low = "1000-01-01 00:00:00";
+            $high = "9999-12-31 23:59:59";
+        }
+
+        $dt_low = new DateTime($low);
+        $dt_high = new DateTime($high);
 
 
-
-        if ($_POST['search'] == 0 && $low >= $high) {
+        if ($dt_low >= $dt_high) {
             echo "Invalid time interval."; 
         
-        } elseif ($_POST['search'] == 0) {
-
-            print_apmt_range($dt_low, $dt_high, $_SESSION['User_ID']);
-
         } else {
 
-            print_apmt_range('1000-01-01 00:00:00', '9999-12-31 00:00:00', $_SESSION['User_ID']);
-        }
+            print_apmt_range($low, $high, $_SESSION['User_ID'], $_POST['PID'], $_POST['clinic']);
+
+        }  
 
     }
 

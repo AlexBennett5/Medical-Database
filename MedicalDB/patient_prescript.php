@@ -21,10 +21,11 @@
         </ul>
 </nav>
 <br>
-<h2> Prescription Record </h2><br>
+<center><h3> Prescription Record </h3><br>
 
 <?php
     gen_prescriptions($_SESSION['User_ID']);
 ?>
 
+</center>
 </body>

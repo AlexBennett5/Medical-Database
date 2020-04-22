@@ -10,14 +10,15 @@
 </head>
 <body>
 
-<link rel="stylesheet" type = "text/css" href="css/default.css" />
+<link rel="stylesheet" type = "text/css" href="css/admin_portal_style.css" />
 <nav> 
         <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
         <ul>
-                    <li><a href="admin_mod_portal.php">Modify Records</a>
-                    <li><a href="admin_search.php"> Search activity </a>
-                    <li><a href="admin_report.php">View reports </a>
-                    <li><a href="logout.php">Logout</a></li>
+                    <li><a href="admin_portal.php">Home</a>
+                <li><a href="admin_mod_portal.php">Modify Records</a>
+                <li><a href="admin_search.php"> Search Activity </a>
+                <li><a href="admin_report.php">View Reports </a>
+                <li><a href="logout.php">Logout</a></li>
         </ul>
 </nav>
 <br>
@@ -41,8 +42,8 @@
 
     record_action("Admin", $_SESSION['User_ID'], "Created New User", $_POST['NPI']);
 
-    echo "Doctor profile for ".$_POST['Name']." (NPI: ".$_POST['NPI'].") created<br>";
-    echo "<a href='admin_portal.php'> Return to admin portal </a>";
+    echo "<center>Doctor profile for ".$_POST['Name']." (NPI: ".$_POST['NPI'].") created <br>";
+    echo "<a href='admin_portal.php'> Return to admin portal </a></center>";
 
     
 
