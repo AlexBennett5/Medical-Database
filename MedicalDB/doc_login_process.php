@@ -8,7 +8,7 @@
     <title> Login Failed </title>
 </head>
     
-    <link rel="stylesheet" type="text/css" href="css/doc_login_style.css" />
+	<link rel="stylesheet" type="text/css" href="css/doc_login.css" />
 
 <body>
     
@@ -18,7 +18,6 @@
                 <li><a href="homepage.php">Home</a></li>
                 <li><a href="login_options.php">Login</a></li>
                 <li><a href="about_us.php">About Us</a></li>
-                <li><a href="contact_form_index.php">Contact Us</a></li>
         </ul>
     </nav>
 

@@ -6,7 +6,7 @@ To set up this website, the following is required:
 
 2.) Run one of the two SQL files in the folder marked Database Script. If you want the final database dump with all insertions we made from the client-side, use the file databasebackup.sql. If you want a 'clean' version of the database with an empty Action table, use the file meddb.sql. Both files have the same schema and triggers, they differ only in the data present (and meddb.sql is easier to read).
 
-3.) To connect the database to the site, go to the file "includes/dbh.php" and change the username and password to your MySQL server username and password.
+3.) To connect the database to the site, go to the file called "includes", in which you will find two connection files "dbh.php" and "query_func.php". You will need to change the username and password in dbh.php and in the sql_connect() function in query_func.php.
 
 Then the site should be accessible via localhost.
 
