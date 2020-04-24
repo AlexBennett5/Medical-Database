@@ -25,13 +25,15 @@
 
 <?php
 
-    $fax = "NULL";
+    $fax = "";
 
     if(!empty($_POST['Fax'])) {
         $fax = $_POST['Fax'];
     }
 
-    mysqli_query($conn, "INSERT INTO Doctors VALUES(".$_POST['NPI'].",'".$_POST['Name']."','".$_POST['Password']."','".$_POST['Work_phone']."','".$fax."','".$_POST['Email']."','".$_POST['Specialist']."','".$_POST['Specialization']."');") or die(mysqli_error($conn));
+    $specialization = mysqli_escape_string($conn, $_POST['Specialization']);
+
+    mysqli_query($conn, "INSERT INTO Doctors VALUES(".$_POST['NPI'].",'".$_POST['Name']."','".$_POST['Password']."','".$_POST['Work_phone']."','".$fax."','".$_POST['Email']."','".$_POST['Specialist']."','".$specialization."');") or die(mysqli_error($conn));
 
     if(!empty($_POST['Clinics']) & is_array($_POST['Clinics'])) {
 

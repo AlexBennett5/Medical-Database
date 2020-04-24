@@ -185,7 +185,8 @@
         echo "<th>Email</th>";
         echo "<th>Previous Conditions</th>";
         echo "<th>Past Surgeries</th>";
-        echo "<th>Blood Type</th></tr>";
+        echo "<th>Blood Type</th>";
+        echo "<th>Gender</th></tr>";
        
         echo "<tr><td align='center'>".$demo['Home_phone']."</td>";
         echo "<td align='center'>".$demo['Cell_phone']."</td>";
@@ -193,7 +194,8 @@
         echo "<td align='center'>".$demo['Email']."</td>";
         echo "<td>".$med['Prev_conditions']."</td>";
         echo "<td>".$med['Past_surgeries']."</td>";
-        echo "<td align='center'>".$med['Blood_type']."</td></tr>";
+        echo "<td align='center'>".$med['Blood_type']."</td>";
+        echo "<td align='center'>".$demo['Sex']."</td></tr>";
 
         echo "<tr><th>Past Prescriptions</th>";
         echo "<th>Family History</th>";
@@ -310,24 +312,24 @@
         $sql_fam = mysqli_query($conn, "SELECT * FROM Family_history WHERE Fam_Hist_ID=".$patient['Fam_Hist_ID'].";") or die(mysqli_error($conn));
         $fam = mysqli_fetch_assoc($sql_fam);
 
-        echo "You are modifying the record of ".$patient['First_Name']." ".$patient['Last_Name']." (".$PID.")<br><br>";
+        echo "<br>You are modifying the record of ".$patient['First_Name']." ".$patient['Last_Name']." (".$PID.")<br><br>";
 
         echo "<input type='hidden' name='PID' value=".$PID.">";
 
         echo "<label for='First_Name'> First name: </label>";
-        echo "<input type='text' name='First_Name' value=".$patient['First_Name']."><br>";
+        echo "<input type='text' name='First_Name' value=".$patient['First_Name']." required><br>";
 
         echo "<label for='Last_Name'> First name: </label>";
-        echo "<input type='text' name='Last_Name' value=".$patient['Last_Name']."><br>";
+        echo "<input type='text' name='Last_Name' value=".$patient['Last_Name']." required><br>";
 
         echo "<label for='SSN'> Last 4 Digits SSN: </label>";
-        echo "<input type='text' minlength=4 maxlength=4 name='SSN' value=".$patient['Last_4_SSN']."><br>";
+        echo "<input type='text' minlength=4 maxlength=4 name='SSN' value=".$patient['Last_4_SSN']." required><br>";
 
         echo "<label for='Age'> Age: </label>";
-        echo "<input type='number' min='0' max='120' name='Age' value=".$demo['Age']."><br>";
+        echo "<input type='number' min='0' max='120' name='Age' value=".$demo['Age']." required><br>";
 
         echo "<label for='DOB'> Date of Birth: </label>";
-        echo "<input type='date' name='DOB' value=".$demo['Date_of_birth']."><br><br>";
+        echo "<input type='date' name='DOB' value=".$demo['Date_of_birth']." required><br><br>";
 
         echo "Ethnicity. (Current value: ".$demo['Ethnicity'].")<br>";
         echo "<label for='Asian/Pacific Islander'>Asian/Pacific Islander</label>";
@@ -357,12 +359,12 @@
 
         echo "Insurance Status. (Current value: ".$demo['Has_insurance'].")<br>";
         echo "<label for='Yes'>Yes</label>";
-        echo "<input type='radio' name='insurance' value='Yes'><br>";
+        echo "<input type='radio' name='insurance' value='Yes' required><br>";
         echo "<label for='No'>No</label>";
         echo "<input type='radio' name='insurance' value='No'><br><br>";
 
         echo "<label for='home_phone'>Home phone:</label>";
-        echo "<input type='tel' name='home_phone' pattern='\([0-9]{3}\) [0-9]{3}-[0-9]{4}' value='".$demo['Home_phone']."'>";
+        echo "<input type='tel' name='home_phone' pattern='\([0-9]{3}\) [0-9]{3}-[0-9]{4}' value='".$demo['Home_phone']."' required>";
         echo "<small> Format: (123) 345-1234</small><br>";
 
         echo "<label for='cell_phone'>Cell phone:</label>";
@@ -374,7 +376,7 @@
         echo "<small> Format: (123) 345-1234</small><br>";
 
         echo "<label for='email'>Email address:</label>";
-        echo "<input type='text' maxlength=80 name='email' value=".$demo['Email']."><br><br>";        
+        echo "<input type='text' maxlength=80 name='email' value=".$demo['Email']." required><br><br>";        
 
         echo "Allergies:<br>";
         echo "<textarea name='allergies' maxlength='225' rows='4' cols='50'>".$demo['Allergies']."</textarea><br><br>";
@@ -490,7 +492,7 @@
         echo "<input type='hidden' name='PID' value=".$patient['PID'].">";
 
         echo "<label for='time'>Appointment Time</label>";
-        echo "<input type='datetime-local' step=1800 name='time' value=".$apmt['Appointment_time']."><br>";
+        echo "<input type='datetime-local' step=1800 name='time' value=".$apmt['Appointment_time']." required><br>";
 
         echo "<label for='doc'>Doctor:</label>";
         echo "<select id='doc' name='doc'>";
@@ -533,11 +535,22 @@
         echo "<input type='text' name='Name' value='".$doctor['Name']."' required><br><br>";
 
         echo "<label for='work_phone'>Work phone:</label>";
+
         echo "<input type='tel' name='work_phone' pattern='\([0-9]{3}\) [0-9]{3}-[0-9]{4}' value='".$doctor['Work_phone']."' required>";
         echo "<small> Format: (123) 345-1234</small><br>";
 
         echo "<label for='fax'>Fax:</label>";
-        echo "<input type='tel' name='fax' pattern='\([0-9]{3}\) [0-9]{3}-[0-9]{4}' value='".$doctor['Fax']."'>";
+
+        if(!is_null($doctor['Fax'])) {
+
+            echo "<input type='tel' name='fax' pattern='\([0-9]{3}\) [0-9]{3}-[0-9]{4}' value='".$doctor['Fax']."'>";
+
+        } else {
+
+            echo "<input type='tel' name='fax' pattern='\([0-9]{3}\) [0-9]{3}-[0-9]{4}'>";
+        }
+
+        
         echo "<small> Format: (123) 345-1234</small><br><br>";
 
         echo "<label for='email'>Email address:</label>";
@@ -588,7 +601,7 @@
             echo "<input type='hidden' name='ID' value=".$patient['PID'].">";
             echo "<input type='hidden' name='ID_type' value='PID'>";
             echo "<input type='hidden' name='table' value='Patients'>";
-            echo "<input type='submit' value='Delete Record' onclick='confirm_delete()'></form></td></tr>";
+            echo "<input type='submit' value='Delete Record' onclick='return confirm_delete()'></form></td></tr>";
 
         }
 
@@ -618,7 +631,7 @@
             echo "<input type='hidden' name='ID' value=".$nurse['NID'].">";
             echo "<input type='hidden' name='ID_type' value='NID'>";
             echo "<input type='hidden' name='table' value='Nurses'>";
-            echo "<input type='submit' value='Delete Record' onclick='confirm_delete()'></form></td></tr>";
+            echo "<input type='submit' value='Delete Record' onclick='return confirm_delete()'></form></td></tr>";
 
         }
 
@@ -639,7 +652,7 @@
             echo "<tr><td> ".$pres['Prescript_ID']."</td><td>".$pres['Prescript_Name']." </td><td>".$pres['Refill']."</td><td>".$pres['Patient']."</td><td>".$pres['Expiration_date']."</td>";
 
             echo "<td><form action='doc_mod_prescript.php' method='POST'><input type='hidden' name='Prescript_ID' value=".$pres['Prescript_ID']."><input type='submit' value='Modify Script'></form></td>";
-            echo "<td><form action='doc_delete_prescript.php' method='POST'><input type='hidden' name='Prescript_ID' value=".$pres['Prescript_ID']."><input type='submit' value='Delete Script' onclick='confirm_delete()'></form></td></tr>";
+            echo "<td><form action='doc_delete_prescript.php' method='POST'><input type='hidden' name='Prescript_ID' value=".$pres['Prescript_ID']."><input type='submit' value='Delete Script' onclick='return confirm_delete()'></form></td></tr>";
 
         }
 
@@ -668,7 +681,7 @@
             echo "<input type='hidden' name='ID' value=".$doctor['NPI'].">";
             echo "<input type='hidden' name='ID_type' value='NPI'>";
             echo "<input type='hidden' name='table' value='Doctors'>";
-            echo "<input type='submit' value='Delete Record' onclick='confirm_delete()'></form></td></tr>";
+            echo "<input type='submit' value='Delete Record' onclick='return confirm_delete()'></form></td></tr>";
         }
 
         echo "</table>";        
@@ -702,7 +715,41 @@
             echo "<tr><td>".$apmt['Appt_ID']."</td><td>".$doc['Name']." (".$doc['NPI'].")</td><td>".$patient['Last_Name'].", ".$patient['First_Name']." (".$patient['PID'].") </td><td>".$clinic['Clinic_name']."</td><td>".$apmt['Appointment_time']."</td>";
 
             echo "<td><form action='nurse_edit_appointments.php' method='POST'><input type='hidden' name='Appt_ID' value=".$apmt['Appt_ID']."><input type='submit' value='Modify Appt'></form></td>";
-            echo "<td><form action='nurse_delete_appointments.php' method='POST'><input type='hidden' name='Appt_ID' value=".$apmt['Appt_ID']."><input type='submit' value='Delete Appt' onclick='confirm_delete()'></form></td></tr>";
+            echo "<td><form action='nurse_delete_appointments.php' method='POST'><input type='hidden' name='Appt_ID' value=".$apmt['Appt_ID']."><input type='submit' value='Delete Appt' onclick='return confirm_delete()'></form></td></tr>";
+
+        }
+
+        echo "</table>";
+
+    }
+
+    //Generates patient appointment calendar
+    function gen_apmt_calendar($PID) {
+
+        $conn = sql_connect();
+        $sql_apmt = mysqli_query($conn, "SELECT * FROM Appointments WHERE Patient_ID=".$PID.";") or die(mysqli_error($conn));
+
+        if(mysqli_num_rows($sql_apmt) == 0) {
+            echo "No appointments found";
+            return;
+        }
+
+        echo "<table><tr><th> Appointment ID </th><th> Doctor </th><th> Patient </th><th> Clinic </th><th> Appointment Time </th><th>Action</th></tr>";
+
+        while($apmt = mysqli_fetch_assoc($sql_apmt)) {
+            
+            $sql_patient = mysqli_query($conn, "SELECT * FROM Patients WHERE PID=".$apmt['Patient_ID'].";");
+            $patient = mysqli_fetch_assoc($sql_patient);
+
+            $sql_doc = mysqli_query($conn, "SELECT * FROM Doctors WHERE NPI=".$apmt['Doctor_ID'].";");
+            $doc = mysqli_fetch_assoc($sql_doc);
+
+            $sql_clinic = mysqli_query($conn, "SELECT * FROM Clinics WHERE Clinic_ID=".$apmt['Clinic_ID'].";");
+            $clinic = mysqli_fetch_assoc($sql_clinic);
+
+            echo "<tr><td>".$apmt['Appt_ID']."</td><td>".$doc['Name']." (".$doc['NPI'].")</td><td>".$patient['Last_Name'].", ".$patient['First_Name']." (".$patient['PID'].") </td><td>".$clinic['Clinic_name']."</td><td>".$apmt['Appointment_time']."</td>";
+
+            echo "<td><form action='patient_delete_appointment.php' method='POST'><input type='hidden' name='Appt_ID' value=".$apmt['Appt_ID']."><input type='submit' value='Delete Appt' onclick='return confirm_delete()'></form></td></tr>";
 
         }
 
@@ -1113,7 +1160,7 @@
 
         echo "<h2>Activity report for interval from ".$range_l." to ".$range_h."</h2><br>";
         
-        echo "<h3>Averade Daily Actions per User Type</h3>";
+        echo "<h3>Average Daily Actions per User Type</h3>";
         echo "<table><tr><th>Patients</th><th>Nurses</th><th>Doctors</th><th>Admin</th></tr>";
         echo "<tr><td><center>".$freq_patient."</center></td><td><center>".$freq_nurse."</center></td><td><center>".$freq_doctor."</center></td><td><center>".$freq_admin."</center></td></tr></table>";
 

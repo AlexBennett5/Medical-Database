@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <title>About Us</title>
+</head>
 
 <link rel="stylesheet" type="text/css" href="css/about_styling.css" />
-    
+
 <body>
       <nav>
         <p>UH Medical Clinic</p>

@@ -22,7 +22,7 @@
         </ul>
 </nav>
 <br>
-
+<center>
 <?php
 
         $check = TRUE;
@@ -36,7 +36,9 @@
                 }
             }
 
-            mysqli_query($conn, "INSERT INTO Nurses VALUES(".$NID.",'".$_POST['Password']."','".$_POST['Name']."', '".$_POST['Email']."','".$_POST['Job_description']."');") or die(mysqli_error($conn));
+            $job_desc = mysqli_escape_string($conn, $_POST['Job_description']);
+
+            mysqli_query($conn, "INSERT INTO Nurses VALUES(".$NID.",'".$_POST['Password']."','".$_POST['Name']."', '".$_POST['Email']."','".$job_desc."');") or die(mysqli_error($conn));
 
             record_action("Admin", $_SESSION['User_ID'], "Created New User", $NID);
 
@@ -47,3 +49,4 @@
 
 
 ?>
+</center>

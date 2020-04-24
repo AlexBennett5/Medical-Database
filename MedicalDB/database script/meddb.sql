@@ -63,7 +63,7 @@ INSERT INTO Demographics VALUES (NULL, 'Yes', 75, '1945-01-01', 'M', 'Other', 'W
 INSERT INTO Demographics VALUES (NULL, 'Yes', 28, '1992-01-01', 'M', 'Hispanic', 'Single', '(713) 123-1241', NULL, NULL, 'hou@patient.com', 'Peanuts');
 INSERT INTO Demographics VALUES (NULL, 'Yes', 31, '1989-01-01', 'F', 'White', 'Divorced', '(713) 123-5647', NULL, NULL, 'chantal@patient.com', NULL);
 INSERT INTO Demographics VALUES (NULL, 'Yes', 58, '1962-01-01', 'F', 'Native American', 'Married', '(713) 123-7568', NULL, NULL, 'lucretia@patient.com', NULL);
-INSERT INTO Demographics VALUES (NULL, 'Yes', 17, '2003-01-01', 'M', 'African-American', 'Single', '(713) 123-3465', NULL, NULL, 'jonathan@patient.com', NULL);
+INSERT INTO Demographics VALUES (NULL, 'Yes', 19, '2003-01-01', 'M', 'African-American', 'Single', '(713) 123-3465', NULL, NULL, 'jonathan@patient.com', NULL);
 INSERT INTO Demographics VALUES (NULL, 'Yes', 20, '2000-01-01', 'M', 'Asian/Pacific Islander', 'Single', '(713) 123-7475', NULL, NULL, 'aleksei@patient.com', 'Cilantro');
 
 
@@ -178,7 +178,7 @@ ALTER TABLE Prescriptions AUTO_INCREMENT=701;
 
 DROP TRIGGER IF EXISTS `duplicate_Script`;
 DELIMITER $$
-CREATE TRIGGER `duplicate_Script` BEFORE INSERT ON `prescriptions` FOR EACH ROW 
+CREATE TRIGGER `duplicate_Script` BEFORE INSERT ON `Prescriptions` FOR EACH ROW 
 BEGIN
 	IF(EXISTS(SELECT 1 from Prescriptions WHERE
 		Prescript_Name = NEW.Prescript_Name AND
@@ -190,7 +190,7 @@ DELIMITER ;
 
 DROP TRIGGER IF EXISTS `out_of_date_Script`;
 DELIMITER $$
-CREATE TRIGGER `out_of_date_Script` BEFORE INSERT ON `prescriptions` FOR EACH ROW 
+CREATE TRIGGER `out_of_date_Script` BEFORE INSERT ON `Prescriptions` FOR EACH ROW 
 BEGIN
 	IF(NEW.Expiration_date < Now()) THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Prescription expiration date is in the past';
@@ -247,7 +247,7 @@ ALTER TABLE Appointments AUTO_INCREMENT=100001;
 
 DROP TRIGGER IF EXISTS `duplicateAppointment`;
 DELIMITER $$
-CREATE TRIGGER `duplicateAppointment` BEFORE INSERT ON `appointments` FOR EACH ROW BEGIN
+CREATE TRIGGER `duplicateAppointment` BEFORE INSERT ON `Appointments` FOR EACH ROW BEGIN
 	IF(EXISTS(SELECT 1 FROM Appointments WHERE
 		Appointment_time = NEW.Appointment_time AND
 		Doctor_ID = NEW.Doctor_ID AND
@@ -259,7 +259,7 @@ DELIMITER ;
 
 DROP TRIGGER IF EXISTS `no_insurance`;
 DELIMITER $$
-CREATE TRIGGER `no_insurance` BEFORE INSERT ON `appointments`
+CREATE TRIGGER `no_insurance` BEFORE INSERT ON `Appointments`
 FOR EACH ROW 
 BEGIN
 	DECLARE test ENUM('Yes','No');

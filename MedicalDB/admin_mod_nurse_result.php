@@ -24,7 +24,9 @@
 <br>
 <?php
 
-            mysqli_query($conn, "UPDATE Nurses SET Name='".$_POST['Name']."', Job_description='".$_POST['job_desc']."' WHERE NID=".$_POST['NID'].";") or die(mysqli_error($conn));
+            $job_desc = mysqli_escape_string($conn, $_POST['job_desc']);
+
+            mysqli_query($conn, "UPDATE Nurses SET Name='".$_POST['Name']."', Job_description='".$job_desc."' WHERE NID=".$_POST['NID'].";") or die(mysqli_error($conn));
 
             record_action("Admin", $_SESSION['User_ID'], "Modified Record", $_POST['NID']);
 

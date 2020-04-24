@@ -33,6 +33,9 @@ Do you want to schedule with a general practitioner or a specialist?<br><br>
 <label for="specialist">Specialist</label><br><br>
 <input type="submit" name="submit" value="Submit">
 </form><br>
+
+<a href='patient_appointment_calendar.php'>View your current appointments</a><br><br>
+
 <a href='patient_portal.php'>Return to patient portal</a>
 </center>
 </body>

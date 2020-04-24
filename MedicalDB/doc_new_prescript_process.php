@@ -27,7 +27,10 @@
 
 <?php
 
-    mysqli_query($conn, "INSERT INTO Prescriptions VALUES (NULL, '".$_POST['Prescript_Name']."','".$_POST['Dosage']."','".$_POST['Refill']."',".$_SESSION['User_ID'].",".$_POST['Patient'].",'".$_POST['Expiration_date']."');") or die(mysqli_error($conn));
+    $Prescript_Name = mysqli_escape_string($conn, $_POST['Prescript_Name']);
+    $Dosage = mysqli_escape_string($conn, $_POST['Dosage']);
+
+    mysqli_query($conn, "INSERT INTO Prescriptions VALUES (NULL, '".$Prescript_Name."','".$Dosage."','".$_POST['Refill']."',".$_SESSION['User_ID'].",".$_POST['Patient'].",'".$_POST['Expiration_date']."');") or die(mysqli_error($conn));
     $pres_ID = mysqli_insert_id($conn);
 
     record_action("Doctor", $_SESSION['User_ID'], "Prescription Written", $pres_ID);

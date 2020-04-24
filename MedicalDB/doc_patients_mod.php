@@ -11,26 +11,25 @@
 <body>
 
 <link rel="stylesheet" type = "text/css" href="css/doc_portal_style.css" />
-<body class="loggedin">
-    <nav class="navtop">
-        <div>
-            <h1>Logged in as <?php echo $_SESSION['Name'] ?></h1>
-            <a href="doc_portal.php">Home</a>
-            <a href="doc_appointments.php">View Upcoming Appointments</a>
-            <a href="doc_patients.php">Check Your Patients Files</a>
-            <a href="doc_prescript.php">Write Prescription</a>
-            <a href="doc_reports.php">Demographic Reports</a>
-            <a href="logout.php">Logout</a>
-        </div>
-    </nav>
-
+<nav>
+    <p>Logged in as <?php echo $_SESSION['Name'] ?></p>
+        <ul>
+            <li><a href="doc_portal.php">Home</a></li>
+            <li><a href="doc_appointments.php">View Upcoming Appointments</a></li>
+            <li><a href="doc_patients.php">Check Your Patients Files</a></li>
+            <li><a href="doc_prescript.php">Write Prescription</a></li>
+            <li><a href="doc_reports.php">Demographic Reports </a></li>
+            <li><a href="logout.php">Logout</a></li>
+        </ul>
+</nav>
+<center>
 <?php
 
-    $sql_doc = mysqli_query($conn, "SELECT * FROM Doctor_patient WHERE PID=".$_POST['PID']." AND NPI=".$_SESSION['User_ID'].";");
+    $sql_doc = mysqli_query($conn, "SELECT * FROM Doctor_patient WHERE PID=".$_POST['PID']." AND NPI=".$_SESSION['User_ID'].";") or die(mysqli_error($conn));
 
     $check = "";
 
-    if (mysqli_num_rows($sql_doc) > 0) {
+    if ($sql_doc) {
         $check = "Yes";
     } else {
         $check = "No";
@@ -47,5 +46,7 @@ Is this patient one of your patients? (Current Value: <?php echo $check ?>) <br>
 <input type="radio" name="add_to_patients" value=1><br><br>
 <input type='submit' value='Finish changes'>
 </form>
+</center>
+<br><br>
 
 

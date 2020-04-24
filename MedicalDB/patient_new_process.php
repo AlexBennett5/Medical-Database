@@ -22,7 +22,7 @@
         </ul>
 </nav>
 <br>
-
+<center>
 <?php
 
 	if(isset($_POST['pwd'])) {
@@ -38,16 +38,22 @@
 				}
 			}
 
+			$allergies = mysqli_escape_string($conn, $_POST['allergies']);
+            $prev_cond = mysqli_escape_string($conn, $_POST['prev_cond']);
+            $past_surg = mysqli_escape_string($conn, $_POST['past_surg']);
+            $past_prescript = mysqli_escape_string($conn, $_POST['past_prescript']);
+            $family_hist = mysqli_escape_string($conn, $_POST['family_hist']);
+
 			//Generate Demographic Entry
-			mysqli_query($conn, "INSERT INTO Demographics VALUES(NULL,'".$_POST["insurance"]."','".$_POST["Age"]."','".$_POST["DOB"]."','".$_POST["gender"]."','".$_POST["ethnicity"]."','".$_POST["marital"]."','".$_POST["home_phone"]."','".$_POST["cell_phone"]."','".$_POST["work_phone"]."','".$_POST["email"]."','".$_POST["allergies"]."');") or die(mysqli_error($conn));
+			mysqli_query($conn, "INSERT INTO Demographics VALUES(NULL,'".$_POST["insurance"]."','".$_POST["Age"]."','".$_POST["DOB"]."','".$_POST["gender"]."','".$_POST["ethnicity"]."','".$_POST["marital"]."','".$_POST["home_phone"]."','".$_POST["cell_phone"]."','".$_POST["work_phone"]."','".$_POST["email"]."','".$allergies."');") or die(mysqli_error($conn));
 			$demo_ID = mysqli_insert_id($conn) or die(mysqli_error($conn));
 
 			//Generate Medical History Entry
-			mysqli_query($conn, "INSERT INTO Medical_history VALUES(NULL,'".$_POST["prev_cond"]."','".$_POST["past_surg"]."','".$_POST["blood_type"]."','".$_POST["past_prescript"]."');") or die(mysqli_error($conn));
+			mysqli_query($conn, "INSERT INTO Medical_history VALUES(NULL,'".$prev_cond."','".$past_surg."','".$_POST["blood_type"]."','".$past_prescript."');") or die(mysqli_error($conn));
 			$med_hist_ID = mysqli_insert_id($conn) or die(mysqli_error($conn));
 
 			//Generate Family History Entry
-			mysqli_query($conn, "INSERT INTO Family_history VALUES(NULL,'".$_POST["family_hist"]."');") or die(mysqli_error($conn));
+			mysqli_query($conn, "INSERT INTO Family_history VALUES(NULL,'".$family_hist."');") or die(mysqli_error($conn));
 			$fam_hist_ID = mysqli_insert_id($conn) or die(mysqli_error($conn));
 
 			//Generate New Patient
@@ -63,13 +69,14 @@
 		    record_action("Patient", $_SESSION['User_ID'], "Created New User", $_SESSION['User_ID']);
 		    record_action("Patient", $_SESSION['User_ID'], "Logged In", $_SESSION['User_ID']);
 
-			echo "<h2>Thank for joining UH Medical Clinic</h2>";
-			echo "Your PID is ".$PID."<br>";
+			echo "<h2>Thank for joining UH Medical Clinic</h2><br>";
+			echo "Your PID is ".$PID."<br><br>";
 			echo "<a href='patient_portal.php'> Continue to your patient portal </a>";
 			
 
 	}
 
 ?>
+</center>
 </body>
 </html>

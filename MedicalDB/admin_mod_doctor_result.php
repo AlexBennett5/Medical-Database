@@ -26,7 +26,9 @@
 <br>
 <?php
 
-        mysqli_query($conn, "UPDATE Doctors SET Name='".$_POST['Name']."', Work_phone='".$_POST['work_phone']."', Fax='".$_POST['fax']."', Email='".$_POST['email']."', Specialist='".$_POST['Specialist']."', Specialization='".$_POST['Specialization']."' WHERE NPI=".$_POST['NPI'].";") or die(mysqli_error($conn));
+        $specialization = mysqli_escape_string($conn, $_POST['Specialization']);
+
+        mysqli_query($conn, "UPDATE Doctors SET Name='".$_POST['Name']."', Work_phone='".$_POST['work_phone']."', Fax='".$_POST['fax']."', Email='".$_POST['email']."', Specialist='".$_POST['Specialist']."', Specialization='".$specialization."' WHERE NPI=".$_POST['NPI'].";") or die(mysqli_error($conn));
 
         mysqli_query($conn, "DELETE FROM Doctor_clinic WHERE NPI=".$_POST['NPI'].";");
 

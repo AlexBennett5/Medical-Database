@@ -92,7 +92,7 @@
                 gen_prescriptions($patient['PID']);
                 echo "<br>";
                 echo "<form action='doc_patients_mod.php' method='POST'>";
-                echo "<input type='hidden' name='PID' value=".$_POST['PID'].">";
+                echo "<input type='hidden' name='PID' value=".$patient['PID'].">";
                 echo "<input type='submit' value='Modify Patient Record'></form>";
 
             }             

@@ -26,7 +26,10 @@
 
 <?php
 
-            mysqli_query($conn, "UPDATE Prescriptions SET Prescript_Name='".$_POST['Prescript_Name']."', Dosage='".$_POST['Dosage']."', Refill='".$_POST['Refill']."', Expiration_date='".$_POST['Expiration_date']."' WHERE Prescript_ID=".$_POST['Prescript_ID'].";") or die(mysqli_error($conn));
+            $Prescript_Name = mysqli_escape_string($conn, $_POST['Prescript_Name']);
+            $Dosage = mysqli_escape_string($conn, $_POST['Dosage']);
+
+            mysqli_query($conn, "UPDATE Prescriptions SET Prescript_Name='".$Prescript_Name."', Dosage='".$Dosage."', Refill='".$_POST['Refill']."', Expiration_date='".$_POST['Expiration_date']."' WHERE Prescript_ID=".$_POST['Prescript_ID'].";") or die(mysqli_error($conn));
 
             record_action("Doctor", $_SESSION['User_ID'], "Modified Record", $_POST['Prescript_ID']);
 

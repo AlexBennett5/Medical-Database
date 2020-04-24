@@ -50,8 +50,8 @@ Search by Action Type<br>
 <input type='checkbox' name='action_type[]' value='Logged In'><br>
 <label for='Logged Out'>Logged Out</label>
 <input type='checkbox' name='action_type[]' value='Logged Out'><br>
-<label for='Created New Patient'>Created New Patient</label>
-<input type='checkbox' name='action_type[]' value='Created New Patient'><br>
+<label for='Created New Patient'>Created New User</label>
+<input type='checkbox' name='action_type[]' value='Created New User'><br>
 <label for='Modified Record'>Modified Record</label>
 <input type='checkbox' name='action_type[]' value='Modified Record'><br>
 <label for='Scheduled Appointment'>Scheduled Appointment</label>

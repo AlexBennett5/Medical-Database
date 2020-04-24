@@ -21,7 +21,7 @@
         </ul>
 </nav>
 <br>
-
+<center>
 <?php
 
 	if(isset($_POST['submit'])) {
@@ -51,7 +51,7 @@
 			echo "<form action='nurse_portal.php'><button type='submit'>Return to nurse portal</button></form>";
 
 		//Check to see if doctor practices at that clinic
-		} elseif (mysqli_num_rows($clinic_check) != 0) {
+		} elseif (mysqli_num_rows($clinic_check) == 0) {
 			echo "Dr. ".$doc['Name']." doesn't currently practice out of ".$clinic['Clinic_name']."<br>";
 			echo "Please <a href='nurse_appointments_portal.php'>return to the appointment scheduler and pick another clinic</a><br><br>";
 			echo "<form action='nurse_portal.php'><button type='submit'>Return to patient portal</button></form>";
@@ -71,7 +71,7 @@
 
 
 ?>
-
+</center>
 </body>
 </html>
 

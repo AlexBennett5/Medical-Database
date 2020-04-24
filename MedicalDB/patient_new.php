@@ -112,8 +112,6 @@ What is your blood type?<br>
 <label for="email">Email address:</label>
 <input type="text" name="email" required><br><br>
 
-For the following fields, enter N/A if not applicable <br><br>
-
 <label for="allergies">Allergies:</label>
 <textarea name="allergies" maxlength="225" rows="4" cols="50"></textarea><br><br>
 

@@ -50,7 +50,7 @@ Check your upcoming appointments for the following range:<br><br>
 
 <input type='submit' name='submit' value='Submit'>
 </form><br><br>
-</center>
+
 </div>
 
 <?php
@@ -88,7 +88,7 @@ Check your upcoming appointments for the following range:<br><br>
     }
 
 ?>
-
+</center>
 </body>
 </html>
 
